@@ -55,7 +55,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BindableBase.cs" />
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="MyICommand.cs" />
+    <Compile Include="ViewModel\DataChartViewModel.cs" />
+    <Compile Include="ViewModel\NetworkDataViewModel.cs" />
+    <Compile Include="ViewModel\NetworkViewModel.cs" />
+    <Compile Include="ViewModel\ReportViewModel.cs" />
     <Compile Include="Views\DataChartView.xaml.cs">
       <DependentUpon>DataChartView.xaml</DependentUpon>
     </Compile>
@@ -68,6 +74,7 @@
     <Compile Include="Views\ReportView.xaml.cs">
       <DependentUpon>ReportView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VML\ViewModelLocator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -125,8 +132,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModel\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
