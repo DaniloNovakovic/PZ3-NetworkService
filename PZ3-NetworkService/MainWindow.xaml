@@ -4,14 +4,51 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PZ3_NetworkService"
+        xmlns:views="clr-namespace:PZ3_NetworkService.Views"
+        xmlns:viewModel="clr-namespace:PZ3_NetworkService.ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
+    
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModel:DataChartViewModel}">
+            <views:DataChartView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:NetworkDataViewModel}">
+            <views:NetworkDataView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:NetworkViewModel}">
+            <views:NetworkView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:ReportViewModel}">
+            <views:ReportView/>
+        </DataTemplate>
+    </Window.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <DockPanel Grid.Row="0" Margin="5">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="Network" Command="{Binding NavCommand}"
+                          CommandParameter="network"/>
+                <MenuItem Header="Network Data" Command="{Binding NavCommand}"
+                          CommandParameter="networkData"/>
+                <MenuItem Header="Data Chart" Command="{Binding NavCommand}"
+                          CommandParameter="dataChart"/>
+                <MenuItem Header="Report" Command="{Binding NavCommand}"
+                          CommandParameter="report"/>
+            </Menu>
+        </DockPanel>
+        <Grid Grid.Row="1">
+            <ContentControl Content="{Binding CurrentViewModel}" Grid.ColumnSpan="2"/>
+        </Grid>
         
     </Grid>
 </Window>
