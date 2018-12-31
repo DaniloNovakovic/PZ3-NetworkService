@@ -7,6 +7,44 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Label Content="Network"></Label>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        
+        <!-- Data Grid -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Canvas Grid.Row="0" Grid.Column="0" >
+                <Button Content="Remove"/>
+                <Image/>
+            </Canvas>
+            <Canvas Grid.Row="1" Grid.Column="1">
+                <Button Content="Remove"/>
+                <Image/>
+            </Canvas>
+            <Canvas Grid.Row="2" Grid.Column="2">
+                <Button Content="Remove"/>
+                <Image/>
+            </Canvas>
+            <Canvas Grid.Row="3" Grid.Column="3">
+                <Button Content="Remove"/>
+                <Image/>
+            </Canvas>
+        </Grid>
+        
+        <!-- Listview -->
+        <ListView Grid.Column="1" />
     </Grid>
 </UserControl>
