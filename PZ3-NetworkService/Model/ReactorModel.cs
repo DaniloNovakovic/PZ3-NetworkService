@@ -7,12 +7,36 @@ using System.Threading.Tasks;
 namespace PZ3_NetworkService.Model
 {
     [Serializable]
-    public class ReactorModel
+    public class ReactorModel : ValidationBase
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public ReactorTypeModel Type { get; set; }
-        public double Temperature { get; set; }
+        private double temp;
+        private string name;
+        public int Id { get; private set; }
+        public string Name
+        {
+            get => this.name;
+            set
+            {
+                if (this.name != value)
+                {
+                    this.name = value;
+                    this.OnPropertyChanged("Name");
+                }
+            }
+        }
+        public ReactorTypeModel Type { get; private set; }
+        public double Temperature
+        {
+            get => this.temp;
+            set
+            {
+                if (this.temp != value)
+                {
+                    this.temp = value;
+                    this.OnPropertyChanged("Temperature");
+                }
+            }
+        }
         public const int MIN_SAFE_TEMP_CELS = 250;
         public const int MAX_SAFE_TEMP_CELS = 350;
 
@@ -38,6 +62,18 @@ namespace PZ3_NetworkService.Model
         public override string ToString()
         {
             return $"Id:{this.Id}, Name:{this.Name}, Temperature:{this.Temperature}, Type:{this.Type}";
+        }
+
+        protected override void ValidateSelf()
+        {
+            if (string.IsNullOrWhiteSpace(this.Name))
+            {
+                this.ValidationErrors["Name"] = "Name field is required.";
+            }
+            if (this.Temperature < MIN_SAFE_TEMP_CELS || this.Temperature > MAX_SAFE_TEMP_CELS)
+            {
+                this.ValidationErrors["Temperature"] = "WARNING: Unsafe temperature!";
+            }
         }
         #endregion
     }

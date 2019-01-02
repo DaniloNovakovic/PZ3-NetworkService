@@ -60,6 +60,8 @@
     <Compile Include="DataIO.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="MyICommand.cs" />
+    <Compile Include="ValidationBase.cs" />
+    <Compile Include="ValidationErrors.cs" />
     <Compile Include="ViewModel\DataChartViewModel.cs" />
     <Compile Include="ViewModel\NetworkDataViewModel.cs" />
     <Compile Include="ViewModel\NetworkViewModel.cs" />
