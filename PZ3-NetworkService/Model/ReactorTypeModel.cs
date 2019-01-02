@@ -2,6 +2,7 @@
 
 namespace PZ3_NetworkService.Model
 {
+    [Serializable]
     public class ReactorTypeModel
     {
         public string Name { get; set; }

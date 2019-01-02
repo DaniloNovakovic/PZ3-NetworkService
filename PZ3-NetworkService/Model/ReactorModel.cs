@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace PZ3_NetworkService.Model
 {
+    [Serializable]
     public class ReactorModel
     {
         public int Id { get; set; }
