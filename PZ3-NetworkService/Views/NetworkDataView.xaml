@@ -4,8 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PZ3_NetworkService.Views"
+             xmlns:viewModel="clr-namespace:PZ3_NetworkService.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewModel:NetworkDataViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -20,8 +24,7 @@
         
         <!-- Filter bar -->
         <ComboBox Grid.Row="0" Grid.Column="0">
-            <ComboBoxItem IsSelected="True">ComboBox Item #1</ComboBoxItem>
-            <ComboBoxItem>ComboBox Item #2</ComboBoxItem>
+            <ComboBoxItem IsSelected="True">Type</ComboBoxItem>
         </ComboBox>
         <Grid Grid.Row="0" Grid.Column="1">
             <Grid.ColumnDefinitions>
@@ -39,7 +42,13 @@
         <Button Content="Filter" Grid.Row="0" Grid.Column="2"/>
         
         <!-- Data grid / table part -->
-        <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+        <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding ReactorList}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="*" Header="Id"  Binding="{Binding Id}"/>
+                <DataGridTextColumn Width="*" Header="Name"  Binding="{Binding Name}"/>
+                <DataGridTextColumn Width="*" Header="Type"  Binding="{Binding Type.Name}"/>
+                <DataGridTextColumn Width="*" Header="Temperature"  Binding="{Binding Temperature}"/>
+            </DataGrid.Columns>
         </DataGrid>
         
         <!-- Add / Delete data part -->
@@ -61,7 +70,9 @@
             <TextBox Text="Name" Grid.Row="1" Grid.Column="1"/>
             
             <Label Content="Type:" Grid.Row="2" Grid.Column="0"/>
-            <TextBox Text="Type" Grid.Row="2" Grid.Column="1"/>
+            <ComboBox Grid.Row="2" Grid.Column="1">
+                <ComboBoxItem IsSelected="True">Type</ComboBoxItem>
+            </ComboBox>
             <Image Grid.Row="1" Grid.RowSpan="2" Grid.Column="2"/>
         </Grid>
         <StackPanel Grid.Row="2" Grid.Column="2">
