@@ -15,6 +15,7 @@ namespace PZ3_NetworkService.ViewModel
         public MyICommand AddReactorCommand { get; set; }
         public MyICommand DeleteReactorCommand { get; set; }
         public MyICommand FilterListCommand { get; set; }
+        public MyICommand RefreshListCommand { get; set; }
 
         private readonly CollectionView reactorTypeNames;
         private readonly CollectionView filterTypeNames;
@@ -87,6 +88,7 @@ namespace PZ3_NetworkService.ViewModel
             this.AddReactorCommand = new MyICommand(this.OnAdd);
             this.DeleteReactorCommand = new MyICommand(this.OnDelete);
             this.FilterListCommand = new MyICommand(this.OnFilter);
+            this.RefreshListCommand = new MyICommand(this.RefreshList);
             this.reactorTypeNames = new CollectionView(Database.ReactorTypes.Values.ToList());
             this.filterTypeNames = new CollectionView(Database.ReactorTypes.Values.ToList());
         }

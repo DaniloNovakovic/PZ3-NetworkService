@@ -41,7 +41,14 @@
             </StackPanel>
             <TextBox Text="{Binding FilterId, Mode=TwoWay}" Grid.Column="2" HorizontalContentAlignment="Left"/>
         </Grid>
-        <Button Content="Filter" Grid.Row="0" Grid.Column="2" Command="{Binding FilterListCommand}"/>
+        <Grid Grid.Row="0" Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Button Content="Filter"  Grid.Column="0" Command="{Binding FilterListCommand}"/>
+            <Button Content="Reset" Grid.Column="1" Command="{Binding RefreshListCommand}"/>
+        </Grid>
         
         <!-- Data grid / table part -->
         <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding ReactorList}" AutoGenerateColumns="False" IsReadOnly="True">
