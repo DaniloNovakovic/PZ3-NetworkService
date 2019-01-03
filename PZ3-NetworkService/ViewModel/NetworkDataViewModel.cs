@@ -24,8 +24,13 @@ namespace PZ3_NetworkService.ViewModel
         private Model.ReactorModel currentReactor = new Model.ReactorModel();
         private string addTypeName = string.Empty;
         private string filterTypeName = string.Empty;
-        private int filterId;
-        private string filterSign; // todo: figure out how to do check radio button sign
+        private int filterId = 0;
+
+        public bool[] FilterModeArray { get; } = new bool[] { false, true }; // {lt, gt}
+        public int FilterSelectedMode
+        {
+            get { return Array.IndexOf(this.FilterModeArray, true); }
+        }
 
         public string AddTypeName
         {

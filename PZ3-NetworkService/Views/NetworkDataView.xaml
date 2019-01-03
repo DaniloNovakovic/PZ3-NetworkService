@@ -36,8 +36,8 @@
             </Grid.ColumnDefinitions>
             <Label Content="Id" Grid.Column="0" HorizontalContentAlignment="Right"/>
             <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                <RadioButton IsChecked="True">&lt;</RadioButton>
-                <RadioButton>&gt;</RadioButton>
+                <RadioButton IsChecked="{Binding Path=FilterModeArray[0], Mode=TwoWay}">&lt;</RadioButton>
+                <RadioButton IsChecked="{Binding Path=FilterModeArray[1], Mode=TwoWay}">&gt;</RadioButton>
             </StackPanel>
             <TextBox Text="{Binding FilterId, Mode=TwoWay}" Grid.Column="2" HorizontalContentAlignment="Left"/>
         </Grid>
