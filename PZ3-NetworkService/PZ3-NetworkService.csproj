@@ -58,6 +58,7 @@
     <Compile Include="BindableBase.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="DataIO.cs" />
+    <Compile Include="IClosing.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="MyICommand.cs" />
     <Compile Include="ValidationBase.cs" />

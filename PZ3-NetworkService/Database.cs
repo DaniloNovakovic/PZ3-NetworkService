@@ -66,7 +66,7 @@ namespace PZ3_NetworkService
         {
             try
             {
-                return serializer.SerializeObject(Database.Reactors, fileName);
+                return serializer.SerializeObject(Database.Reactors.Values.ToList(), fileName);
             }
             catch
             {
@@ -80,7 +80,13 @@ namespace PZ3_NetworkService
         {
             try
             {
-                return serializer.DeSerializeObject<Dictionary<int, Model.ReactorModel>>(fileName);
+                List<Model.ReactorModel> reactors = serializer.DeSerializeObject<List<Model.ReactorModel>>(fileName);
+                var retVal = new Dictionary<int, Model.ReactorModel>();
+                foreach(var reactor in reactors)
+                {
+                    retVal[reactor.Id] = reactor;
+                }
+                return retVal;
             }
             catch
             {

@@ -1,13 +1,14 @@
 ﻿using PZ3_NetworkService.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PZ3_NetworkService
 {
-    public class MainWindowViewModel : BindableBase
+    public class MainWindowViewModel : BindableBase, IClosing
     {
         public MyICommand<string> NavCommand { get; private set; }
         private DataChartViewModel dataChartViewModel = new DataChartViewModel();
@@ -48,6 +49,11 @@ namespace PZ3_NetworkService
                     this.CurrentViewModel = this.reportViewModel;
                     break;
             }
+        }
+        public bool OnClosing()
+        {
+            Database.Save();
+            return true;
         }
     }
 }

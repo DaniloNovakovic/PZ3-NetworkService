@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -27,12 +28,13 @@ namespace PZ3_NetworkService
                     xmlDocument.Save(fileName);
                     stream.Close();
                 }
+                return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return false;
+                MessageBox.Show(e.Message);
             }
-            return true;
+            return false;
         }
 
         public T DeSerializeObject<T>(string fileName)
