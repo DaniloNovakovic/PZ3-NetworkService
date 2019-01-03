@@ -10,7 +10,7 @@ namespace PZ3_NetworkService.Model
         public ReactorTypeModel()
         {
             this.Name = string.Empty;
-            this.ImgSrc = string.Empty;
+            this.ImgSrc = "/Images/thermal_power_plant.jpg";
         }
 
         public ReactorTypeModel(string name, string imgSrc)

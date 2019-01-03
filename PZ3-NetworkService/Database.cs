@@ -11,11 +11,17 @@ namespace PZ3_NetworkService
         private static DataIO serializer = new DataIO();
         public static Dictionary<int, Model.ReactorModel> Reactors { get; private set; }
         public static List<int> ReactorIds { get; private set; }
+        public static Dictionary<string, Model.ReactorTypeModel> ReactorTypes { get; private set; }
 
         static Database()
         {
             Database.Reactors = Database.Load() ?? new Dictionary<int, Model.ReactorModel>();
             Database.ReactorIds = Database.Reactors.Keys.ToList();
+            Database.ReactorTypes = new Dictionary<string, Model.ReactorTypeModel>()
+            {
+                { "thermal", new Model.ReactorTypeModel("thermal", "/Images/thermal_power_plant.jpg")},
+                { "fusion", new Model.ReactorTypeModel("fusion","/Images/fusion_power_plant.jpg") }
+            };
         }
 
         public static bool Add(Model.ReactorModel reactor)
