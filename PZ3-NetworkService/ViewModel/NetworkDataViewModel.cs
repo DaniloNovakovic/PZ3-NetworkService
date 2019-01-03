@@ -106,7 +106,31 @@ namespace PZ3_NetworkService.ViewModel
         }
         private void OnFilter()
         {
-            // TODO: Implement this function
+            this.ReactorList.Clear();
+            foreach (KeyValuePair<int, Model.ReactorModel> pair in Database.Reactors)
+            {
+                int id = pair.Key;
+                string typeName = pair.Value.Type.Name;
+
+                if (typeName != this.FilterTypeName)
+                    continue;
+
+                switch (this.FilterSelectedMode)
+                {
+                    case 0:
+                        if (id < this.FilterId)
+                        {
+                            this.ReactorList.Add(Database.Reactors[id]);
+                        }
+                        break;
+                    case 1:
+                        if (id > this.FilterId)
+                        {
+                            this.ReactorList.Add(Database.Reactors[id]);
+                        }
+                        break;
+                }
+            }
         }
         private void RefreshList()
         {
