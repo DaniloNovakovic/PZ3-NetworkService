@@ -9,17 +9,51 @@ namespace PZ3_NetworkService.ViewModel
 {
     public class NetworkDataViewModel : BindableBase
     {
-        public static BindingList<Model.ReactorModel> ReactorList { get; private set; } = new BindingList<Model.ReactorModel>();
-        static NetworkDataViewModel()
+        public BindingList<Model.ReactorModel> ReactorList { get; private set; } = new BindingList<Model.ReactorModel>();
+        public MyICommand AddReactorCommand { get; set; }
+        public MyICommand DeleteReactorCommand { get; set; }
+        public MyICommand FilterListCommand { get; set; }
+        private Model.ReactorModel currentReactor = new Model.ReactorModel();
+        public Model.ReactorModel CurrentReactor
         {
-            RefreshList();
+            get => this.currentReactor;
+            set
+            {
+                this.currentReactor = value;
+                this.OnPropertyChanged("CurrentReactor");
+            }
         }
-        private static void RefreshList()
+
+        public NetworkDataViewModel()
         {
-            ReactorList.Clear();
+            this.RefreshList();
+            this.AddReactorCommand = new MyICommand(this.OnAdd);
+            this.DeleteReactorCommand = new MyICommand(this.OnDelete);
+            this.FilterListCommand = new MyICommand(this.OnFilter);
+        }
+        private void OnAdd()
+        {
+            this.CurrentReactor.Validate();
+            if (this.CurrentReactor.IsValid && Database.Add(this.CurrentReactor))
+            {
+                this.RefreshList();
+                // + Restart Metering Simulator?
+            }
+        }
+        private void OnDelete()
+        {
+            // TODO: Implement this function
+        }
+        private void OnFilter()
+        {
+            // TODO: Implement this function
+        }
+        private void RefreshList()
+        {
+            this.ReactorList.Clear();
             foreach (Model.ReactorModel reactor in Database.Reactors.Values)
             {
-                ReactorList.Add(reactor);
+                this.ReactorList.Add(reactor);
             }
         }
 

@@ -6,13 +6,17 @@ namespace PZ3_NetworkService.Model
     public class ReactorTypeModel
     {
         public string Name { get; set; }
-        public string ImgSrc { get; private set; }
-        public ReactorTypeModel() { }
+        public string ImgSrc { get; set; }
+        public ReactorTypeModel()
+        {
+            this.Name = string.Empty;
+            this.ImgSrc = string.Empty;
+        }
 
         public ReactorTypeModel(string name, string imgSrc)
         {
-            this.Name = name ?? throw new ArgumentNullException(nameof(name));
-            this.ImgSrc = imgSrc ?? throw new ArgumentNullException(nameof(imgSrc));
+            this.Name = name ?? string.Empty;
+            this.ImgSrc = imgSrc ?? string.Empty;
         }
 
         #region overrides

@@ -11,7 +11,7 @@ namespace PZ3_NetworkService.Model
     {
         private double temp;
         private string name;
-        public int Id { get; private set; }
+        public int Id { get; set; }
         public string Name
         {
             get => this.name;
@@ -24,7 +24,7 @@ namespace PZ3_NetworkService.Model
                 }
             }
         }
-        public ReactorTypeModel Type { get; private set; }
+        public ReactorTypeModel Type { get; set; }
         public double Temperature
         {
             get => this.temp;
@@ -40,12 +40,16 @@ namespace PZ3_NetworkService.Model
         public const int MIN_SAFE_TEMP_CELS = 250;
         public const int MAX_SAFE_TEMP_CELS = 350;
 
-        public ReactorModel() { }
+        public ReactorModel()
+        {
+            this.Name = string.Empty;
+            this.Type = new ReactorTypeModel();
+        }
         public ReactorModel(int id, string name, ReactorTypeModel type, double temperature)
         {
             this.Id = id;
-            this.Name = name ?? throw new ArgumentNullException(nameof(name));
-            this.Type = type ?? throw new ArgumentNullException(nameof(type));
+            this.Name = name ?? string.Empty;
+            this.Type = type ?? new ReactorTypeModel();
             this.Temperature = temperature;
         }
         #region overrides
