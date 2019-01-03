@@ -71,7 +71,7 @@ namespace PZ3_NetworkService.ViewModel
             }
         }
 
-
+        public Model.ReactorModel SelectedReactor { get; set; }
         public Model.ReactorModel CurrentReactor
         {
             get => this.currentReactor;
@@ -104,7 +104,12 @@ namespace PZ3_NetworkService.ViewModel
         }
         private void OnDelete()
         {
-            // TODO: Implement this function
+            int id = SelectedReactor.Id;
+            if (Database.Remove(id))
+            {
+                RefreshList();
+                // + Restart Metering Simulator?
+            }
         }
         private void OnFilter()
         {
