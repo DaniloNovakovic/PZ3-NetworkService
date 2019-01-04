@@ -33,7 +33,7 @@ namespace PZ3_NetworkService
         public static string ConvertToLogFormat(int id, double temperature)
         {
             var currDate = DateTime.Now;
-            return $"{currDate.ToString(@"dd/MM/yyyy',' HH:mm")}: ${id}, ${temperature}";
+            return $"{currDate.ToString(@"dd/MM/yyyy',' HH:mm")}: {id}, {temperature}";
         }
     }
 }
