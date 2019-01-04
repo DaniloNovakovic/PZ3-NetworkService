@@ -70,12 +70,20 @@ namespace PZ3_NetworkService.ViewModel
         {
             StringBuilder builder = new StringBuilder();
             builder.AppendLine("REPORT:");
-            List<int> ids = logDict.Keys.ToList();
+            List<int> ids = logDict.Keys.Where(x=>Database.Reactors.ContainsKey(x)).ToList();
             ids.Sort();
             foreach(int id in ids)
             {
                 builder.AppendLine($"- id={id}");
-                foreach(string el in logDict[id])
+                logDict[id].Sort((lhs, rhs) =>
+                {
+                    const string regexPattern = @"(\d+/\d+/\d+ \d+:\d+)";
+                    const string dateTimePattern = @"dd/MM/yyyy hh:mm";
+                    DateTime leftDate = DateTime.ParseExact(Regex.Match(lhs, regexPattern).Value, dateTimePattern, CultureInfo.InvariantCulture);
+                    DateTime rightDate = DateTime.ParseExact(Regex.Match(rhs, regexPattern).Value, dateTimePattern, CultureInfo.InvariantCulture);
+                    return DateTime.Compare(leftDate, rightDate);
+                });
+                foreach (string el in logDict[id])
                 {
                     builder.AppendLine($"\t{el}");
                 }
