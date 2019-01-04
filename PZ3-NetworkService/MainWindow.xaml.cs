@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -68,7 +69,7 @@ namespace PZ3_NetworkService
                         else
                         {
                             //U suprotnom, server je poslao promenu stanja nekog objekta u sistemu
-                            Console.WriteLine(incomming); //Na primer: "Objekat_1:272"
+                            Debug.WriteLine(incomming); //Na primer: "Objekat_1:272"
 
                             //################ IMPLEMENTACIJA ####################
                             // Obraditi poruku kako bi se dobile informacije o izmeni
@@ -78,7 +79,7 @@ namespace PZ3_NetworkService
                             {
                                 if (objectIndex < 0 || objectIndex >= Database.ReactorIds.Count)
                                 {
-                                    Console.Error.WriteLine($"Value \"{incomming}\" from server is out of bounds!");
+                                    Debug.Fail($"Value \"{incomming}\" from server is out of bounds!");
                                 }
                                 else if (double.TryParse(match.Groups[2].Value, out double newVal))
                                 {
@@ -89,12 +90,12 @@ namespace PZ3_NetworkService
                                 }
                                 else
                                 {
-                                    Console.Error.WriteLine($"Could not parse \"{match.Groups[2].Value}\" to integer.");
+                                    Debug.Fail($"Could not parse \"{match.Groups[2].Value}\" to integer.");
                                 }
                             }
                             else
                             {
-                                Console.Error.WriteLine($"Could not parse \"{match.Groups[1].Value}\" to integer.");
+                                Debug.Fail($"Could not parse \"{match.Groups[1].Value}\" to integer.");
                             }
                         }
                     }, null);
