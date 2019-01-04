@@ -59,6 +59,7 @@
     <Compile Include="Database.cs" />
     <Compile Include="DataIO.cs" />
     <Compile Include="IClosing.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="MyICommand.cs" />
     <Compile Include="ValidationBase.cs" />

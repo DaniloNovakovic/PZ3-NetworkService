@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -28,8 +29,8 @@ namespace PZ3_NetworkService
 
         public MainWindow()
         {
-            InitializeComponent();
-            createListener(); //Povezivanje sa serverskom aplikacijom
+            this.InitializeComponent();
+            this.createListener(); //Povezivanje sa serverskom aplikacijom
         }
 
         private void createListener()
@@ -60,7 +61,8 @@ namespace PZ3_NetworkService
                              * duzinu liste koja sadrzi sve objekte pod monitoringom, odnosno
                              * njihov ukupan broj (NE BROJATI OD NULE, VEC POSLATI UKUPAN BROJ)
                              * */
-                            Byte[] data = System.Text.Encoding.ASCII.GetBytes(count.ToString());
+                            this.count = Database.ReactorIds.Count;
+                            Byte[] data = System.Text.Encoding.ASCII.GetBytes(this.count.ToString());
                             stream.Write(data, 0, data.Length);
                         }
                         else
@@ -71,19 +73,42 @@ namespace PZ3_NetworkService
                             //################ IMPLEMENTACIJA ####################
                             // Obraditi poruku kako bi se dobile informacije o izmeni
                             // Azuriranje potrebnih stvari u aplikaciji
-
+                            var match = Regex.Match(incomming, @"Objekat_(\d+):([0-9.]+)");
+                            if (int.TryParse(match.Groups[1].Value, out int objectIndex))
+                            {
+                                if (objectIndex < 0 || objectIndex >= Database.ReactorIds.Count)
+                                {
+                                    Console.Error.WriteLine($"Value \"{incomming}\" from server is out of bounds!");
+                                }
+                                else if (double.TryParse(match.Groups[2].Value, out double newVal))
+                                {
+                                    int id = Database.ReactorIds[objectIndex];
+                                    Database.Reactors[id].Temperature = newVal;
+                                    string logStr = Log.ConvertToLogFormat(id, newVal);
+                                    Log.Append(logStr);
+                                }
+                                else
+                                {
+                                    Console.Error.WriteLine($"Could not parse \"{match.Groups[2].Value}\" to integer.");
+                                }
+                            }
+                            else
+                            {
+                                Console.Error.WriteLine($"Could not parse \"{match.Groups[1].Value}\" to integer.");
+                            }
                         }
                     }, null);
                 }
-            });
-
-            listeningThread.IsBackground = true;
+            })
+            {
+                IsBackground = true
+            };
             listeningThread.Start();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            IClosing context = DataContext as IClosing;
+            IClosing context = this.DataContext as IClosing;
             if (context != null)
             {
                 e.Cancel = !context.OnClosing();
