@@ -58,11 +58,12 @@ namespace PZ3_NetworkService.ViewModel
         }
         public void OnShow()
         {
-            Dictionary<int, List<string>> logDict = Log.ParseLogFile(callback: (string currLine)=> {
+            Dictionary<int, List<string>> logDict = Log.ParseLogFile(callback: (string currLine) =>
+            {
                 var match = Regex.Match(currLine, @"(\d+/\d+/\d+)");
                 string sdate = match.Value;
                 DateTime date = DateTime.ParseExact(sdate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-                return DateTime.Compare(date, startDate) >= 0 && DateTime.Compare(date, endDate) <= 0;
+                return DateTime.Compare(date, this.startDate) >= 0 && DateTime.Compare(date, this.endDate) <= 0;
             });
             this.TextReport = this.ConvertLogDictToStr(logDict);
         }
@@ -70,11 +71,11 @@ namespace PZ3_NetworkService.ViewModel
         {
             StringBuilder builder = new StringBuilder();
             builder.AppendLine("REPORT:");
-            List<int> ids = logDict.Keys.Where(x=>Database.Reactors.ContainsKey(x)).ToList();
+            List<int> ids = logDict.Keys.Where(x => Database.Reactors.ContainsKey(x)).ToList();
             ids.Sort();
-            foreach(int id in ids)
+            foreach (int id in ids)
             {
-                builder.AppendLine($"- id={id}");
+                builder.AppendLine($"- {Database.Reactors[id].Name}, ID: {id}");
                 logDict[id].Sort((lhs, rhs) =>
                 {
                     const string regexPattern = @"(\d+/\d+/\d+ \d+:\d+)";
