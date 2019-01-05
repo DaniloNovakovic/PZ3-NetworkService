@@ -54,6 +54,6 @@
                           CommandParameter="report"/>
             </Menu>
         </DockPanel>
-        <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" Grid.ColumnSpan="2" Margin="20"/>
+        <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" Grid.ColumnSpan="2" Margin="20,10,20,10"/>
     </Grid>
 </Window>

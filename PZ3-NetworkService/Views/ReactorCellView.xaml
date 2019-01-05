@@ -46,9 +46,9 @@
           Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
           ToolTip="Remove"
             Grid.Row="2" Grid.Column="0"
-            Margin="-12" Height="30" Width="30">
+            Margin="-12" Height="30" Width="30" Command="{Binding UntrackCommand}">
             <materialDesign:PackIcon
-                Kind="Trash"
+                Kind="Clear"
                 Height="17"
                 Width="17" />
         </Button>
