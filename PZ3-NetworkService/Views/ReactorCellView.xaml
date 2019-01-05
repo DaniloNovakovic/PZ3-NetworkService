@@ -5,13 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PZ3_NetworkService.Views"
              xmlns:viewModel="clr-namespace:PZ3_NetworkService.ViewModel"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="150">
+    
     <UserControl.DataContext>
         <viewModel:ReactorCellViewModel/>
     </UserControl.DataContext>
+    <UserControl.Resources>
+        <Image x:Key="TrashIcon" Source="/Images/trash.png"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
@@ -19,11 +25,22 @@
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        
-        <Border Grid.Row="0" Grid.ColumnSpan="2" BorderThickness="2" BorderBrush="{Binding BorderBrush}">
-            <Image Source="{Binding SelectedReactor.Type.ImgSrc}"/>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Title}" HorizontalAlignment="Center"/>
+        <!-- Currently a "cheating hack" :P -->
+        <DataGrid ItemsSource="{Binding Collection}"
+                SelectedItem="{Binding SelectedReactor}"
+                dd:DragDrop.IsDragSource="True"
+                dd:DragDrop.IsDropTarget="True" 
+                BorderBrush="{Binding BorderBrush}"
+                AutoGenerateColumns="False"
+                Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  Opacity="0"
+        />
+        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="3" BorderBrush="{Binding BorderBrush}">
+            <Image Source="{Binding SelectedReactor.Type.ImgSrc}" Stretch="UniformToFill"/>
         </Border>
-        <Button Grid.Row="1" Grid.Column="0" Content="Remove" Command="{Binding UntrackCommand}"/>
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Temperature}" HorizontalAlignment="Center"/>
+
+        <Button Grid.Row="2" Grid.Column="0" Content="{StaticResource TrashIcon}" Command="{Binding UntrackCommand}" Background="Red"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Temperature}" HorizontalAlignment="Center"/>
     </Grid>
 </UserControl>

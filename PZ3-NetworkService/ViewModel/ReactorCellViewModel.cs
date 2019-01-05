@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace PZ3_NetworkService.ViewModel
     public class ReactorCellViewModel : BindableBase
     {
         public MyICommand UntrackCommand { get; private set; }
+        public BindingList<Model.ReactorModel> Collection { get; set; } = new BindingList<Model.ReactorModel>();
         private Model.ReactorModel selectedReactor;
         public Model.ReactorModel SelectedReactor
         {
@@ -21,19 +23,26 @@ namespace PZ3_NetworkService.ViewModel
                 this.OnPropertyChanged("SelectedReactor");
                 this.OnPropertyChanged("BorderBrush");
                 this.OnPropertyChanged("Temperature");
+                this.OnPropertyChanged("Title");
             }
+        }
+        public string Title
+        {
+            get => this.SelectedReactor?.ToString() ?? string.Empty;
         }
         public double Temperature
         {
-            get => SelectedReactor?.Temperature ?? default(double);
+            get => this.SelectedReactor?.Temperature ?? default(double);
         }
         public string BorderBrush
         {
-            get {
+            get
+            {
                 if (this.SelectedReactor != null)
                 {
                     return this.SelectedReactor.IsTemperatureSafe() ? "#FF00FF00" : "#FFFF0000";
-                } else
+                }
+                else
                 {
                     return "#FF000000";
                 }
@@ -41,26 +50,38 @@ namespace PZ3_NetworkService.ViewModel
         }
         public ReactorCellViewModel()
         {
-            this.UntrackCommand = new MyICommand(OnUntrack);
-            //this.SelectedReactor.PropertyChanged += this.SelectedReactor_PropertyChanged;
+            this.UntrackCommand = new MyICommand(this.OnUntrack);
+            this.Collection.RaiseListChangedEvents = true;
+            this.Collection.ListChanged += this.Collection_ListChanged;
         }
+
+        private void Collection_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            if (e.ListChangedType == ListChangedType.ItemAdded)
+            {
+                this.SelectedReactor = Collection[e.NewIndex];
+                this.SelectedReactor.PropertyChanged += this.SelectedReactor_PropertyChanged;
+            }
+        }
+        
 
         private void SelectedReactor_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == "Temperature")
+            if (e.PropertyName == "Temperature")
             {
                 this.OnPropertyChanged("BorderBrush");
                 this.OnPropertyChanged("Temperature");
             }
         }
-        
+
         public void OnUntrack()
         {
             if (this.SelectedReactor != null)
             {
                 this.SelectedReactor.PropertyChanged -= this.SelectedReactor_PropertyChanged;
                 this.SelectedReactor = null;
-            } 
+                this.Collection.Clear();
+            }
         }
     }
 }
