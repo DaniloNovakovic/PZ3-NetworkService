@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:PZ3_NetworkService.Views"
              xmlns:viewModel="clr-namespace:PZ3_NetworkService.ViewModel"
              xmlns:dd="urn:gong-wpf-dragdrop"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="150">
     
@@ -26,7 +27,7 @@
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Title}" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Title}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
         <!-- Currently a "cheating hack" :P -->
         <DataGrid ItemsSource="{Binding Collection}"
                 SelectedItem="{Binding SelectedReactor}"
@@ -41,7 +42,16 @@
             <Image Source="{Binding SelectedReactor.Type.ImgSrc}" Stretch="UniformToFill"/>
         </Border>
 
-        <Button Grid.Row="2" Grid.Column="0" Content="{StaticResource TrashIcon}" Command="{Binding UntrackCommand}" Background="Red" />
+        <Button
+          Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+          ToolTip="Remove"
+            Grid.Row="2" Grid.Column="0"
+            Margin="-12" Height="30" Width="30">
+            <materialDesign:PackIcon
+                Kind="Trash"
+                Height="17"
+                Width="17" />
+        </Button>
         <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Temperature}" HorizontalAlignment="Center"/>
     </Grid>
 </UserControl>
