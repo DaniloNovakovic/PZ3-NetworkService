@@ -23,7 +23,15 @@ namespace PZ3_NetworkService.ViewModel
         public NetworkViewModel()
         {
             this.UntrackedReactors = new BindingList<Model.ReactorModel>(Database.Reactors.Values.ToList());
+            ReactorCellViewModel.ReactorUntracked += this.OnReactorUntracked;
         }
 
+        private void OnReactorUntracked(object sender, PropertyChangedEventArgs e)
+        {
+            if(sender is Model.ReactorModel reactor)
+            {
+                UntrackedReactors.Add(Database.Reactors[reactor.Id]);
+            }
+        }
     }
 }

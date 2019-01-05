@@ -11,6 +11,8 @@ namespace PZ3_NetworkService.ViewModel
 {
     public class ReactorCellViewModel : BindableBase
     {
+        public static event PropertyChangedEventHandler ReactorUntracked = delegate { };
+
         public MyICommand UntrackCommand { get; private set; }
         public BindingList<Model.ReactorModel> Collection { get; set; } = new BindingList<Model.ReactorModel>();
         private Model.ReactorModel selectedReactor;
@@ -59,11 +61,11 @@ namespace PZ3_NetworkService.ViewModel
         {
             if (e.ListChangedType == ListChangedType.ItemAdded)
             {
-                this.SelectedReactor = Collection[e.NewIndex];
+                this.SelectedReactor = this.Collection[e.NewIndex];
                 this.SelectedReactor.PropertyChanged += this.SelectedReactor_PropertyChanged;
             }
         }
-        
+
 
         private void SelectedReactor_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -79,6 +81,7 @@ namespace PZ3_NetworkService.ViewModel
             if (this.SelectedReactor != null)
             {
                 this.SelectedReactor.PropertyChanged -= this.SelectedReactor_PropertyChanged;
+                ReactorUntracked(this.SelectedReactor, new PropertyChangedEventArgs(""));
                 this.SelectedReactor = null;
                 this.Collection.Clear();
             }

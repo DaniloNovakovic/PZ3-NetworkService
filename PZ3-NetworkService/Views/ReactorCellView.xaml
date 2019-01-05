@@ -40,7 +40,7 @@
             <Image Source="{Binding SelectedReactor.Type.ImgSrc}" Stretch="UniformToFill"/>
         </Border>
 
-        <Button Grid.Row="2" Grid.Column="0" Content="{StaticResource TrashIcon}" Command="{Binding UntrackCommand}" Background="Red"/>
+        <Button Grid.Row="2" Grid.Column="0" Content="{StaticResource TrashIcon}" Command="{Binding UntrackCommand}" Background="Red" />
         <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Temperature}" HorizontalAlignment="Center"/>
     </Grid>
 </UserControl>
