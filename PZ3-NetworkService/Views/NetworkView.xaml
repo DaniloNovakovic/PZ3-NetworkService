@@ -38,11 +38,14 @@
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            
-            <local:ReactorCellView Grid.Row="0" Grid.Column="0"/>
-            <local:ReactorCellView Grid.Row="1" Grid.Column="1"/>
-            <local:ReactorCellView Grid.Row="2" Grid.Column="2"/>
-            <local:ReactorCellView Grid.Row="3" Grid.Column="3"/>
+
+            <local:ReactorCellView Grid.Row="0" Grid.Column="0" Padding="10"/>
+            <local:ReactorCellView Grid.Row="0" Grid.Column="1" Padding="10"/>
+            <local:ReactorCellView Grid.Row="0" Grid.Column="2" Padding="10"/>
+            <local:ReactorCellView Grid.Row="0" Grid.Column="3" Padding="10"/>
+            <local:ReactorCellView Grid.Row="1" Grid.Column="1" Padding="10"/>
+            <local:ReactorCellView Grid.Row="2" Grid.Column="2" Padding="10"/>
+            <local:ReactorCellView Grid.Row="3" Grid.Column="3" Padding="10"/>
         </Grid>
 
         <!-- Listview -->

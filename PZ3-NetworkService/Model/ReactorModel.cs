@@ -57,6 +57,7 @@ namespace PZ3_NetworkService.Model
                 if (this.temp != value)
                 {
                     this.temp = value;
+                    //this.ValidateTemperature();
                     this.OnPropertyChanged("Temperature");
                 }
             }
@@ -115,11 +116,15 @@ namespace PZ3_NetworkService.Model
         }
         public void ValidateTemperature()
         {
-            if (this.Temperature < MIN_SAFE_TEMP_CELS || this.Temperature > MAX_SAFE_TEMP_CELS)
+            if (!this.IsTemperatureSafe())
             {
                 this.ValidationErrors["Temperature"] = "WARNING: Unsafe temperature!";
             }
             this.OnPropertyChanged("ValidationErrors");
+        }
+        public bool IsTemperatureSafe()
+        {
+            return this.Temperature >= MIN_SAFE_TEMP_CELS && this.Temperature <= MAX_SAFE_TEMP_CELS;
         }
         public void ValidateUniqueId()
         {
