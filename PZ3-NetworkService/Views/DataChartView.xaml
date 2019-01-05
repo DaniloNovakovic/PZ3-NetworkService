@@ -4,14 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PZ3_NetworkService.Views"
+             xmlns:viewModel="clr-namespace:PZ3_NetworkService.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewModel:DataChartViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Button Content="Show" Grid.Row="0" Width="70" HorizontalAlignment="Left" Margin="10"/>
-        <Canvas Grid.Row="1"/>
+        <Canvas Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+        </Canvas>
     </Grid>
 </UserControl>

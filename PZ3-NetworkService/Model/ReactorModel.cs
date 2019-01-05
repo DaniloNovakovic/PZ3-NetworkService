@@ -84,17 +84,21 @@ namespace PZ3_NetworkService.Model
         #region overrides
         public override bool Equals(object obj)
         {
-            return this.ToString().Equals(obj?.ToString() ?? string.Empty);
+            if (obj is ReactorModel reactor)
+            {
+                return this.Id == reactor.Id;
+            }
+            return this.ToFullString().Equals(obj?.ToString() ?? string.Empty);
         }
 
         public override int GetHashCode()
         {
-            return this.ToString().GetHashCode();
+            return this.ToFullString().GetHashCode();
         }
 
         public override string ToString()
         {
-            return $"Id:{this.Id}, Name:{this.Name}, Temperature:{this.Temperature}, Type:{this.Type}";
+            return $"{this.Name}, ID: {this.Id}";
         }
 
         protected override void ValidateSelf()
@@ -105,6 +109,10 @@ namespace PZ3_NetworkService.Model
             }
         }
         #endregion
+        public string ToFullString()
+        {
+            return $"Id:{this.Id}, Name:{this.Name}, Temperature:{this.Temperature}, Type:{this.Type}";
+        }
         public void ValidateTemperature()
         {
             if (this.Temperature < MIN_SAFE_TEMP_CELS || this.Temperature > MAX_SAFE_TEMP_CELS)

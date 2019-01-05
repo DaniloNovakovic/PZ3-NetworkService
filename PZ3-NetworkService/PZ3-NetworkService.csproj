@@ -67,6 +67,7 @@
     <Compile Include="ViewModel\DataChartViewModel.cs" />
     <Compile Include="ViewModel\NetworkDataViewModel.cs" />
     <Compile Include="ViewModel\NetworkViewModel.cs" />
+    <Compile Include="ViewModel\ReactorCellViewModel.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
     <Compile Include="Views\DataChartView.xaml.cs">
       <DependentUpon>DataChartView.xaml</DependentUpon>
@@ -76,6 +77,9 @@
     </Compile>
     <Compile Include="Views\NetworkView.xaml.cs">
       <DependentUpon>NetworkView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReactorCellView.xaml.cs">
+      <DependentUpon>ReactorCellView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ReportView.xaml.cs">
       <DependentUpon>ReportView.xaml</DependentUpon>
@@ -102,6 +106,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NetworkView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReactorCellView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

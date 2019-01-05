@@ -11,16 +11,16 @@ namespace PZ3_NetworkService
     public class MainWindowViewModel : BindableBase, IClosing
     {
         public MyICommand<string> NavCommand { get; private set; }
-        private DataChartViewModel dataChartViewModel = new DataChartViewModel();
-        private NetworkDataViewModel networkDataViewModel = new NetworkDataViewModel();
-        private NetworkViewModel networkViewModel = new NetworkViewModel();
-        private ReportViewModel reportViewModel = new ReportViewModel();
+        private readonly DataChartViewModel dataChartViewModel = new DataChartViewModel();
+        private readonly NetworkDataViewModel networkDataViewModel = new NetworkDataViewModel();
+        private readonly NetworkViewModel networkViewModel = new NetworkViewModel();
+        private readonly ReportViewModel reportViewModel = new ReportViewModel();
         private BindableBase currentViewModel;
 
         public MainWindowViewModel()
         {
             this.NavCommand = new MyICommand<string>(this.OnNav);
-            this.CurrentViewModel = this.reportViewModel;
+            this.CurrentViewModel = this.networkViewModel;
         }
 
         public BindableBase CurrentViewModel

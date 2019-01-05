@@ -13,7 +13,7 @@
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
-    
+
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModel:DataChartViewModel}">
             <views:DataChartView/>
@@ -34,7 +34,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        
+
         <DockPanel Grid.Row="0" Margin="5">
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="Network" Command="{Binding NavCommand}"
@@ -47,9 +47,6 @@
                           CommandParameter="report"/>
             </Menu>
         </DockPanel>
-        <Grid Grid.Row="1">
-            <ContentControl Content="{Binding CurrentViewModel}" Grid.ColumnSpan="2"/>
-        </Grid>
-        
+        <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>

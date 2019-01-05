@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -45,7 +46,7 @@ namespace PZ3_NetworkService
         /// <param name="fileName">Name of file to parse</param>
         /// <param name="callback">Receives current line and outputs true if it should be contained in returned dictionary</param>
         /// <returns></returns>
-        public static Dictionary<int, List<string>> ParseLogFile(string fileName = "log.txt", Func<string, bool> callback = null)
+        public static Dictionary<int, List<string>> ParseLogFile(string fileName = "log.txt", bool ascending = true, Func<string, bool> callback = null)
         {
             Dictionary<int, List<string>> retVal = new Dictionary<int, List<string>>();
             try
@@ -80,6 +81,7 @@ namespace PZ3_NetworkService
                                 Debug.Fail($"Failed to parse id={sid}");
                             }
                         }
+                        SortDictValues(ref retVal, ascending);
                     }
                 }
                 else
@@ -92,6 +94,37 @@ namespace PZ3_NetworkService
                 Debug.Fail(ex.Message);
             }
             return retVal;
+        }
+        public static void SortDictValues(ref Dictionary<int, List<string>> logDict, bool ascending = true)
+        {
+            foreach (int key in logDict.Keys)
+            {
+                logDict[key].Sort((lhs, rhs) =>
+                {
+                    try
+                    {
+                        const string regexPattern = @"\d+/\d+/\d+ \d+:\d+";
+                        const string dateTimePattern = @"dd/MM/yyyy HH:mm";
+                        string leftMatch = Regex.Match(lhs, regexPattern).Value;
+                        string rightMatch = Regex.Match(rhs, regexPattern).Value;
+                        DateTime leftDate = DateTime.ParseExact(leftMatch, dateTimePattern, CultureInfo.InvariantCulture);
+                        DateTime rightDate = DateTime.ParseExact(rightMatch, dateTimePattern, CultureInfo.InvariantCulture);
+                        if (ascending)
+                        {
+                            return DateTime.Compare(leftDate, rightDate);
+                        }
+                        else
+                        {
+                            return DateTime.Compare(rightDate, leftDate);
+                        }
+                    }
+                    catch (Exception err)
+                    {
+                        Debug.Fail(err.Message);
+                        return 0;
+                    }
+                });
+            }
         }
     }
 }

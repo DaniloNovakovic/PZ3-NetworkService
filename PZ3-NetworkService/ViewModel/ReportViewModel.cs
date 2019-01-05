@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -76,14 +77,6 @@ namespace PZ3_NetworkService.ViewModel
             foreach (int id in ids)
             {
                 builder.AppendLine($"- {Database.Reactors[id].Name}, ID: {id}");
-                logDict[id].Sort((lhs, rhs) =>
-                {
-                    const string regexPattern = @"(\d+/\d+/\d+ \d+:\d+)";
-                    const string dateTimePattern = @"dd/MM/yyyy hh:mm";
-                    DateTime leftDate = DateTime.ParseExact(Regex.Match(lhs, regexPattern).Value, dateTimePattern, CultureInfo.InvariantCulture);
-                    DateTime rightDate = DateTime.ParseExact(Regex.Match(rhs, regexPattern).Value, dateTimePattern, CultureInfo.InvariantCulture);
-                    return DateTime.Compare(leftDate, rightDate);
-                });
                 foreach (string el in logDict[id])
                 {
                     builder.AppendLine($"\t{el}");
