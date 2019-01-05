@@ -42,7 +42,7 @@ namespace PZ3_NetworkService.ViewModel
             {
                 if (this.SelectedReactor != null)
                 {
-                    return this.SelectedReactor.IsTemperatureSafe() ? "#FF00FF00" : "#FFFF0000";
+                    return this.SelectedReactor.IsTemperatureSafe() ? "#AEEA00" : "#d50000";
                 }
                 else
                 {
