@@ -35,6 +35,7 @@
                 BorderBrush="{Binding BorderBrush}"
                 AutoGenerateColumns="False"
                 Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  Opacity="0"
+                Margin="0,-25,0,0"
         />
         <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="3" BorderBrush="{Binding BorderBrush}">
             <Image Source="{Binding SelectedReactor.Type.ImgSrc}" Stretch="UniformToFill"/>

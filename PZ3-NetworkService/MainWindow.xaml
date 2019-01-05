@@ -7,7 +7,14 @@
         xmlns:views="clr-namespace:PZ3_NetworkService.Views"
         xmlns:viewModel="clr-namespace:PZ3_NetworkService.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="550" MinWidth="700" Height="550" Width="700"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="MainWindow" MinHeight="550" MinWidth="800" Height="550" Width="700"
         Closing="Window_Closing">
 
     <Window.DataContext>
@@ -47,6 +54,6 @@
                           CommandParameter="report"/>
             </Menu>
         </DockPanel>
-        <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" Grid.ColumnSpan="2"/>
+        <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" Grid.ColumnSpan="2" Padding="20"/>
     </Grid>
 </Window>
