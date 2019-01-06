@@ -28,13 +28,21 @@ namespace PZ3_NetworkService.ViewModel
                 this.OnPropertyChanged("Title");
             }
         }
+        public bool ButtonEnabled
+        {
+            get => this.Collection.Count > 0;
+        }
+        public string GridVisibility
+        {
+            get => this.Collection.Count > 0 ? "Hidden" : "Visible";
+        }
         public string Title
         {
             get => this.SelectedReactor?.ToString() ?? string.Empty;
         }
-        public double Temperature
+        public double? Temperature
         {
-            get => this.SelectedReactor?.Temperature ?? default(double);
+            get => this.SelectedReactor?.Temperature;
         }
         public string BorderBrush
         {
@@ -64,6 +72,8 @@ namespace PZ3_NetworkService.ViewModel
                 this.SelectedReactor = this.Collection[e.NewIndex];
                 this.SelectedReactor.PropertyChanged += this.SelectedReactor_PropertyChanged;
             }
+            this.OnPropertyChanged("GridVisibility");
+            this.OnPropertyChanged("ButtonEnabled");
         }
 
 

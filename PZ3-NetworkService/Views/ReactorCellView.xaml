@@ -31,27 +31,29 @@
         <!-- Currently a "cheating hack" :P -->
         <DataGrid ItemsSource="{Binding Collection}"
                 SelectedItem="{Binding SelectedReactor}"
-                dd:DragDrop.IsDragSource="True"
                 dd:DragDrop.IsDropTarget="True" 
                 BorderBrush="{Binding BorderBrush}"
                 AutoGenerateColumns="False"
-                Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  Opacity="0"
-                Margin="0,-25,0,0"
+                ColumnHeaderHeight="0"
+                Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  
+                Opacity="0"
+                Visibility="{Binding GridVisibility}"
         />
         <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="3" BorderBrush="{Binding BorderBrush}">
-            <Image Source="{Binding SelectedReactor.Type.ImgSrc}" Stretch="UniformToFill"/>
+            <Image Source="{Binding SelectedReactor.Type.ImgSrc}" />
         </Border>
 
         <Button
           Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-          ToolTip="Remove"
+          ToolTip="Clear"
             Grid.Row="2" Grid.Column="0"
-            Margin="-12" Height="30" Width="30" Command="{Binding UntrackCommand}">
+            Margin="-12" Height="30" Width="30" Command="{Binding UntrackCommand}"
+            IsEnabled="{Binding ButtonEnabled}">
             <materialDesign:PackIcon
                 Kind="Clear"
                 Height="17"
                 Width="17" />
         </Button>
-        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Temperature}" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Temperature}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
     </Grid>
 </UserControl>

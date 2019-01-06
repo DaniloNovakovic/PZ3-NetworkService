@@ -91,11 +91,11 @@
             </Grid.ColumnDefinitions>
             <Label Content="Id:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,20,0"/>
             <TextBox Text="{Binding CurrentReactor.Id, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,20,0"/>
-            <TextBlock Text="{Binding CurrentReactor.ValidationErrors[Id]}" Grid.Row="1" Grid.Column="1" Foreground="Red" VerticalAlignment="Center" Margin="0,0,20,0"/>
+            <TextBlock Text="{Binding CurrentReactor.ValidationErrors[Id]}" Grid.Row="1" Grid.Column="1" Foreground="Red" VerticalAlignment="Center"/>
 
             <Label Content="Name:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,20,0"/>
             <TextBox Text="{Binding CurrentReactor.Name, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,20,0"/>
-            <TextBlock Text="{Binding CurrentReactor.ValidationErrors[Name]}" Grid.Row="3" Grid.Column="1" Foreground="Red" VerticalAlignment="Center" Margin="0,0,20,0"/>
+            <TextBlock Text="{Binding CurrentReactor.ValidationErrors[Name]}" Grid.Row="3" Grid.Column="1" Foreground="Red" VerticalAlignment="Center"/>
 
 
             <Label Content="Type:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,20,0"/>

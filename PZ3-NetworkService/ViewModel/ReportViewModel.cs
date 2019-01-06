@@ -53,7 +53,7 @@ namespace PZ3_NetworkService.ViewModel
         }
         public ReportViewModel()
         {
-            this.startDate = DateTime.Today;
+            this.startDate = DateTime.ParseExact("01/01/2019", "dd/MM/yyyy", CultureInfo.InvariantCulture) ;
             this.endDate = DateTime.Today;
             this.ShowCommand = new MyICommand(this.OnShow);
         }
