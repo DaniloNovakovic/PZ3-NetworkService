@@ -63,7 +63,7 @@ namespace PZ3_NetworkService
                             {
                                 continue;
                             }
-                            var match = Regex.Match(currLine, @"([0-9/]+)\D*(\d*:\d*)\D*(\d*)\D*(\d*)");
+                            var match = Regex.Match(currLine, @"([0-9/]+)\D+(\d+:\d+)\D+(\d+)\D+([0-9.]+)");
                             string sdate = match.Groups[1].Value;
                             string stime = match.Groups[2].Value;
                             string sid = match.Groups[3].Value;

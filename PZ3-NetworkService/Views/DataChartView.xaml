@@ -18,8 +18,7 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
@@ -41,12 +40,12 @@
                 <Label Content="Number of last changes:" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
                 <TextBox Text="{Binding Limit, Mode=TwoWay}" Grid.Column="2" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
             </Grid>
-            <Button Grid.Column="2" HorizontalAlignment="Center" Margin="10" ToolTip="Show Chart">
+            <Button Grid.Column="2" HorizontalAlignment="Center" Margin="10" ToolTip="Show Chart" Command="{Binding ShowChartCommand}">
                 <materialDesign:PackIcon Kind="ShowChart" Height="24" Width="24" />
             </Button>
         </Grid>
 
-        <ItemsControl Grid.Row="1" Margin="20" ItemsSource="{Binding Path=Points}">
+        <ItemsControl Grid.Row="1" Margin="20" ItemsSource="{Binding Path=Lines}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas Background="Gray" Width="{Binding ChartWidth}" Height="{Binding ChartHeight}"/>
