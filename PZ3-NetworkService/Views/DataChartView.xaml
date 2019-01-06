@@ -16,10 +16,53 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button  Grid.Row="0" Width="70" HorizontalAlignment="Left" Margin="10" ToolTip="Show Chart">
-            <materialDesign:PackIcon Kind="ShowChart" Height="24" Width="24" />
-        </Button>
-        <Canvas Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-        </Canvas>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Reactor:" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                <ComboBox Grid.Column="1"
+                    ItemsSource="{Binding Path=Reactors}"
+                    SelectedValue="{Binding Path=SelectedReactor}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Number of last changes:" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                <TextBox Text="{Binding Limit, Mode=TwoWay}" Grid.Column="2" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            </Grid>
+            <Button Grid.Column="2" HorizontalAlignment="Center" Margin="10" ToolTip="Show Chart">
+                <materialDesign:PackIcon Kind="ShowChart" Height="24" Width="24" />
+            </Button>
+        </Grid>
+
+        <ItemsControl Grid.Row="1" Margin="20" ItemsSource="{Binding Path=Points}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Background="Gray" Width="{Binding ChartWidth}" Height="{Binding ChartHeight}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type viewModel:MyLine}">
+                    <Line Stroke="Black" X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Canvas.Top" Value="0" />
+                    <Setter Property="Canvas.Left" Value="0" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
     </Grid>
 </UserControl>
