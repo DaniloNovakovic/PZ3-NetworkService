@@ -48,20 +48,14 @@
         <ItemsControl Grid.Row="1" Margin="20" ItemsSource="{Binding Path=Lines}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas Background="Gray" Width="{Binding ChartWidth}" Height="{Binding ChartHeight}"/>
+                    <Canvas Background="Gray" Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type viewModel:MyLine}">
-                    <Line Stroke="Black" X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}"/>
+                    <Line Stroke="Green" StrokeThickness="2" X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemContainerStyle>
-                <Style>
-                    <Setter Property="Canvas.Top" Value="0" />
-                    <Setter Property="Canvas.Left" Value="0" />
-                </Style>
-            </ItemsControl.ItemContainerStyle>
         </ItemsControl>
     </Grid>
 </UserControl>

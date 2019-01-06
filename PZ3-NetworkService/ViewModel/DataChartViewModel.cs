@@ -20,6 +20,8 @@ namespace PZ3_NetworkService.ViewModel
         public double X2 { get; set; } = 0;
         public double Y2 { get; set; } = 0;
 
+        public SolidColorBrush Brush { get; set; }
+
         public MyLine(double x1 = 0, double y1 = 0, double x2 = 0, double y2 = 0)
         {
             this.X1 = x1;
@@ -27,7 +29,7 @@ namespace PZ3_NetworkService.ViewModel
             this.X2 = x2;
             this.Y2 = y2;
         }
-        public MyLine(Point p1, Point p2)
+        public MyLine(Point p1, Point p2, Color? brushColor = null)
         {
             this.X1 = p1.X;
             this.Y1 = p1.Y;
@@ -36,19 +38,43 @@ namespace PZ3_NetworkService.ViewModel
         }
         public override string ToString()
         {
-            return $"({X1},{Y1}):({X2},{Y2})";
+            return $"({this.X1},{this.Y1}):({this.X2},{this.Y2})";
         }
     }
     public class DataChartViewModel : BindableBase
     {
         public MyICommand ShowChartCommand { get; set; }
         public BindingList<Model.ReactorModel> Reactors { get; private set; }
-        public BindingList<MyLine> Lines { get; set; } = new BindingList<MyLine>();
+        private ObservableCollection<MyLine> lines = new ObservableCollection<MyLine>();
+        public ObservableCollection<MyLine> Lines
+        {
+            get => this.lines; set
+            {
+                lines = value;
+                OnPropertyChanged("Lines");
+            }
+        }
+        private ObservableCollection<Point> points = new ObservableCollection<Point>();
+        public ObservableCollection<Point> Points
+        {
+            get => this.points;
+            set
+            {
+                points = value;
+                OnPropertyChanged("Points");
+            }
+        }
 
         public Model.ReactorModel SelectedReactor { get; set; }
 
-        public int ChartHeight { get; set; } = 300;
-        public int ChartWidth { get; set; } = 500;
+        public int MarginTop { get; private set; } = 50;
+        public int MarginLeft { get; private set; } = 50;
+        public int MarginBottom { get; private set; } = 50;
+        public int MarginRight { get; private set; } = 50;
+        public int CanvasHeight { get; private set; } = 300;
+        public int CanvasWidth { get; private set; } = 500;
+        public int ChartHeight { get => this.CanvasHeight - (this.MarginTop + this.MarginBottom); }
+        public int ChartWidth { get => this.CanvasWidth - (this.MarginLeft + this.MarginRight); }
         private int limit = 10;
         public int Limit
         {
@@ -78,9 +104,9 @@ namespace PZ3_NetworkService.ViewModel
             List<DateTime> timeList = tuple.Item1;
             List<double> tempsList = tuple.Item2;
             List<Point> points = this.ConvertToPoints(timeList, tempsList);
-            List<MyLine> myLines = ConnectPoints(points);
-            this.Lines = new BindingList<MyLine>(myLines);
-            OnPropertyChanged("Lines");
+            List<MyLine> myLines = this.ConnectPoints(points);
+            this.Lines = new ObservableCollection<MyLine>(myLines);
+            this.OnPropertyChanged("Lines");
         }
 
         /// <summary>
@@ -135,12 +161,13 @@ namespace PZ3_NetworkService.ViewModel
             int n = Math.Min(timeList.Count, tempsList.Count);
             for (int i = 0; i < n; ++i)
             {
+                double scaledTime = ConvertRange(minTime, maxTime, 0, this.Limit, timeList[i]);
                 Point pt = new Point
                 {
-                    X = ConvertRange(minTime, maxTime, 0, this.ChartWidth, timeList[i]),
-                    Y = ChartHeight - ConvertRange(minTemp, maxTemp, 0, this.ChartHeight, tempsList[i])
+                    X = ConvertRange(0, this.Limit, 0, this.ChartWidth, scaledTime) + this.MarginLeft,
+                    Y = this.ChartHeight - ConvertRange(minTemp, maxTemp, 0, this.ChartHeight, tempsList[i]) + this.MarginTop
                 };
-                Debug.WriteLine(pt);
+                Debug.WriteLine($" time:{timeList[i]}, temp:{tempsList[i]} => pt:{pt}");
                 retVal.Add(pt);
             }
 
