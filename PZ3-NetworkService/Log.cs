@@ -37,7 +37,7 @@ namespace PZ3_NetworkService
         public static string ConvertToLogFormat(int id, double temperature)
         {
             var currDate = DateTime.Now;
-            return $"{currDate.ToString(@"dd/MM/yyyy',' HH:mm")}: {id}, {temperature}";
+            return $"{currDate.ToString(@"dd/MM/yyyy',' HH:mm:ss")}: {id}, {temperature}";
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace PZ3_NetworkService
                             {
                                 continue;
                             }
-                            var match = Regex.Match(currLine, @"([0-9/]+)\D+(\d+:\d+)\D+(\d+)\D+([0-9.]+)");
+                            var match = Regex.Match(currLine, @"([0-9/]+)\D+([0-9:]+)[:]\s+(\d+)\D+([0-9.]+)");
                             string sdate = match.Groups[1].Value;
                             string stime = match.Groups[2].Value;
                             string sid = match.Groups[3].Value;
@@ -103,12 +103,12 @@ namespace PZ3_NetworkService
                 {
                     try
                     {
-                        const string regexPattern = @"\d+/\d+/\d+ \d+:\d+";
-                        const string dateTimePattern = @"dd/MM/yyyy HH:mm";
+                        const string regexPattern = @"[0-9/]+\D[0-9:]+[^:]";
+                        //const string dateTimePattern = @"dd/MM/yyyy HH:mm:ss";
                         string leftMatch = Regex.Match(lhs, regexPattern).Value;
                         string rightMatch = Regex.Match(rhs, regexPattern).Value;
-                        DateTime leftDate = DateTime.ParseExact(leftMatch, dateTimePattern, CultureInfo.InvariantCulture);
-                        DateTime rightDate = DateTime.ParseExact(rightMatch, dateTimePattern, CultureInfo.InvariantCulture);
+                        DateTime leftDate = DateTime.Parse(leftMatch, CultureInfo.InvariantCulture);
+                        DateTime rightDate = DateTime.Parse(rightMatch, CultureInfo.InvariantCulture);
                         if (ascending)
                         {
                             return DateTime.Compare(leftDate, rightDate);

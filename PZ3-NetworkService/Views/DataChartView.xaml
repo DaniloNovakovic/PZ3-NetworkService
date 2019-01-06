@@ -48,7 +48,7 @@
         <ItemsControl Grid.Row="1" Margin="20" ItemsSource="{Binding Path=Lines}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas Background="Gray" Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                    <Canvas Background="LightGray" Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>

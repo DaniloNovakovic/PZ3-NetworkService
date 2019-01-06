@@ -48,20 +48,11 @@ namespace PZ3_NetworkService.ViewModel
         private ObservableCollection<MyLine> lines = new ObservableCollection<MyLine>();
         public ObservableCollection<MyLine> Lines
         {
-            get => this.lines; set
-            {
-                lines = value;
-                OnPropertyChanged("Lines");
-            }
-        }
-        private ObservableCollection<Point> points = new ObservableCollection<Point>();
-        public ObservableCollection<Point> Points
-        {
-            get => this.points;
+            get => this.lines;
             set
             {
-                points = value;
-                OnPropertyChanged("Points");
+                this.lines = value;
+                this.OnPropertyChanged("Lines");
             }
         }
 
@@ -106,7 +97,6 @@ namespace PZ3_NetworkService.ViewModel
             List<Point> points = this.ConvertToPoints(timeList, tempsList);
             List<MyLine> myLines = this.ConnectPoints(points);
             this.Lines = new ObservableCollection<MyLine>(myLines);
-            this.OnPropertyChanged("Lines");
         }
 
         /// <summary>
@@ -138,10 +128,10 @@ namespace PZ3_NetworkService.ViewModel
             List<DateTime> timeList = new List<DateTime>();
             for (int i = 0; i < n && i < strList.Count; ++i)
             {
-                var match = Regex.Match(strList[i], @"^(\d+/\d+/\d+ \d+:\d+).*?([0-9.]+)$");
+                var match = Regex.Match(strList[i], @"^([0-9/]+ [0-9:]+).*?([0-9.]+)$");
                 string sdate = match.Groups[1].Value;
                 string stemp = match.Groups[2].Value;
-                DateTime date = DateTime.ParseExact(sdate, @"dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+                DateTime date = DateTime.Parse(sdate, CultureInfo.InvariantCulture);
                 if (double.TryParse(stemp, out double temp))
                 {
                     tempList.Add(temp);
@@ -161,10 +151,10 @@ namespace PZ3_NetworkService.ViewModel
             int n = Math.Min(timeList.Count, tempsList.Count);
             for (int i = 0; i < n; ++i)
             {
-                double scaledTime = ConvertRange(minTime, maxTime, 0, this.Limit, timeList[i]);
                 Point pt = new Point
                 {
-                    X = ConvertRange(0, this.Limit, 0, this.ChartWidth, scaledTime) + this.MarginLeft,
+                    X = ConvertRange(minTime, maxTime, 0, this.ChartWidth, timeList[i]) + this.MarginLeft,
+                    //X = ConvertRange(n, 0, 0, this.ChartWidth, i) + this.MarginLeft,
                     Y = this.ChartHeight - ConvertRange(minTemp, maxTemp, 0, this.ChartHeight, tempsList[i]) + this.MarginTop
                 };
                 Debug.WriteLine($" time:{timeList[i]}, temp:{tempsList[i]} => pt:{pt}");
@@ -188,8 +178,8 @@ namespace PZ3_NetworkService.ViewModel
         public static double ConvertToUnixTimestamp(DateTime date)
         {
             DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            TimeSpan diff = date.ToUniversalTime() - origin;
-            return Math.Floor(diff.TotalSeconds);
+            TimeSpan diff = date - origin;
+            return diff.TotalSeconds;
         }
 
         #region ConvertRange
