@@ -47,8 +47,12 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <Button Content="Filter"  Grid.Column="0" Command="{Binding FilterListCommand}" Margin="20"/>
-            <Button Content="Reset" Grid.Column="1" Command="{Binding RefreshListCommand}" Margin="20"/>
+            <Button Grid.Column="0" Command="{Binding FilterListCommand}" Margin="20" ToolTip="Filter">
+                <materialDesign:PackIcon Kind="FilterList" Height="24" Width="24" />
+            </Button>
+            <Button Grid.Column="1" Command="{Binding RefreshListCommand}" Margin="20" ToolTip="Refresh">
+                <materialDesign:PackIcon Kind="Refresh" Height="24" Width="24" />
+            </Button>
         </Grid>
 
         <!-- Data grid / table part -->

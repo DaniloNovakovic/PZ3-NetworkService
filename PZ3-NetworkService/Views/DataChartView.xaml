@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PZ3_NetworkService.Views"
              xmlns:viewModel="clr-namespace:PZ3_NetworkService.ViewModel"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
@@ -15,7 +16,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button Content="Show" Grid.Row="0" Width="70" HorizontalAlignment="Left" Margin="10"/>
+        <Button  Grid.Row="0" Width="70" HorizontalAlignment="Left" Margin="10" ToolTip="Show Chart">
+            <materialDesign:PackIcon Kind="ShowChart" Height="24" Width="24" />
+        </Button>
         <Canvas Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
         </Canvas>
     </Grid>
