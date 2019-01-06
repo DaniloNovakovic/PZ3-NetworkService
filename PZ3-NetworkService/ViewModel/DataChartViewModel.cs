@@ -19,29 +19,31 @@ namespace PZ3_NetworkService.ViewModel
         public double Y1 { get; set; } = 0;
         public double X2 { get; set; } = 0;
         public double Y2 { get; set; } = 0;
+        public double Opacity { get; set; } = 1;
 
         public SolidColorBrush Brush { get; set; }
 
-        public MyLine(double x1 = 0, double y1 = 0, double x2 = 0, double y2 = 0, Color? brushColor = null)
+        public MyLine(double x1 = 0, double y1 = 0, double x2 = 0, double y2 = 0, Color? brushColor = null, double opacity = 1)
         {
             this.X1 = x1;
             this.Y1 = y1;
             this.X2 = x2;
             this.Y2 = y2;
             this.Brush = new SolidColorBrush(brushColor ?? Colors.Green);
+            this.Opacity = opacity;
         }
-        public MyLine(Point p1, Point p2, Color? brushColor = null)
-        {
-            this.X1 = p1.X;
-            this.Y1 = p1.Y;
-            this.X2 = p2.X;
-            this.Y2 = p2.Y;
-            this.Brush = new SolidColorBrush(brushColor ?? Colors.Green);
-        }
+        public MyLine(Point p1, Point p2, Color? brushColor = null, double opacity = 1)
+            : this(p1.X, p1.Y, p2.X, p2.Y, brushColor, opacity) { }
         public override string ToString()
         {
             return $"({this.X1},{this.Y1}):({this.X2},{this.Y2})";
         }
+    }
+    public class MyLabel
+    {
+        public string Content { get; set; } = string.Empty;
+        public double X { get; set; } = 0;
+        public double Y { get; set; } = 0;
     }
     public class DataChartViewModel : BindableBase
     {
@@ -57,6 +59,16 @@ namespace PZ3_NetworkService.ViewModel
                 this.OnPropertyChanged("Lines");
             }
         }
+        private ObservableCollection<MyLabel> labels = new ObservableCollection<MyLabel>();
+        public ObservableCollection<MyLabel> Labels
+        {
+            get => this.labels;
+            set
+            {
+                this.labels = value;
+                this.OnPropertyChanged("Labels");
+            }
+        }
 
         public Model.ReactorModel SelectedReactor { get; set; }
         private DateTime maxTime;
@@ -64,12 +76,12 @@ namespace PZ3_NetworkService.ViewModel
         private double maxTemp;
         private double minTemp;
 
-        public int MarginTop { get; private set; } = 0;
+        public int MarginTop { get; private set; } = 10;
         public int MarginLeft { get; private set; } = 50;
         public int MarginBottom { get; private set; } = 50;
-        public int MarginRight { get; private set; } = 0;
-        public int CanvasHeight { get; private set; } = 300;
-        public int CanvasWidth { get; private set; } = 500;
+        public int MarginRight { get; private set; } = 10;
+        public int CanvasHeight { get; private set; } = 350;
+        public int CanvasWidth { get; private set; } = 600;
         public int ChartHeight { get => this.CanvasHeight - (this.MarginTop + this.MarginBottom); }
         public int ChartWidth { get => this.CanvasWidth - (this.MarginLeft + this.MarginRight); }
         private int limit = 10;
@@ -85,6 +97,7 @@ namespace PZ3_NetworkService.ViewModel
                 }
             }
         }
+        private double LabelSpace => this.ChartHeight / 5;
 
         public DataChartViewModel()
         {
@@ -102,7 +115,8 @@ namespace PZ3_NetworkService.ViewModel
             List<double> tempsList = tuple.Item2;
             List<Point> points = this.ConvertToPoints(timeList, tempsList);
             List<MyLine> myLines = this.ConnectPoints(points);
-            AddAxesLines(ref myLines);
+            this.AddAxesLines(ref myLines);
+            this.AddHorizontalLines(ref myLines, tempsList);
             this.Lines = new ObservableCollection<MyLine>(myLines);
         }
         public void AddAxesLines(ref List<MyLine> myLines)
@@ -111,8 +125,20 @@ namespace PZ3_NetworkService.ViewModel
             {
                 myLines = new List<MyLine>();
             }
-            myLines.Add(new MyLine(MarginLeft, MarginTop, MarginLeft, MarginTop + ChartHeight, Colors.Purple));
-            myLines.Add(new MyLine(MarginLeft, MarginTop + ChartHeight, MarginLeft + ChartWidth, MarginTop + ChartHeight, Colors.Purple));
+            myLines.Add(new MyLine(this.MarginLeft, this.MarginTop, this.MarginLeft, this.MarginTop + this.ChartHeight, Colors.Purple));
+            myLines.Add(new MyLine(this.MarginLeft, this.MarginTop + this.ChartHeight, this.MarginLeft + this.ChartWidth, this.MarginTop + this.ChartHeight, Colors.Purple));
+        }
+        public void AddHorizontalLines(ref List<MyLine> myLines, List<double> tempsList)
+        {
+            if (myLines is null)
+            {
+                myLines = new List<MyLine>();
+            }
+            for (double y = this.MarginTop; y < this.ChartHeight; y += this.LabelSpace)
+            {
+                MyLine line = new MyLine(MarginLeft, y, MarginLeft + ChartWidth, y, Colors.Purple, 0.3);
+                myLines.Add(line);
+            }
         }
 
         /// <summary>
@@ -156,6 +182,14 @@ namespace PZ3_NetworkService.ViewModel
             }
             return new Tuple<List<DateTime>, List<double>>(timeList, tempList);
         }
+        public double ScaleTemp(double minTemp, double maxTemp, double temperature)
+        {
+            return this.ChartHeight - ConvertRange(minTemp, maxTemp, 0, this.ChartHeight, temperature) + this.MarginTop;
+        }
+        public double ScaleTime(DateTime minTime, DateTime maxTime, DateTime time)
+        {
+            return ConvertRange(minTime, maxTime, 0, this.ChartWidth, time) + this.MarginLeft;
+        }
         public List<Point> ConvertToPoints(List<DateTime> timeList, List<double> tempsList)
         {
             var retVal = new List<Point>();
@@ -169,9 +203,9 @@ namespace PZ3_NetworkService.ViewModel
             {
                 Point pt = new Point
                 {
-                    X = ConvertRange(this.minTime, this.maxTime, 0, this.ChartWidth, timeList[i]) + this.MarginLeft,
+                    X = this.ScaleTime(this.minTime, this.maxTime, timeList[i]),
                     //X = ConvertRange(n, 0, 0, this.ChartWidth, i) + this.MarginLeft,
-                    Y = this.ChartHeight - ConvertRange(this.minTemp, this.maxTemp, 0, this.ChartHeight, tempsList[i]) + this.MarginTop
+                    Y = this.ScaleTemp(this.minTemp, this.maxTemp, tempsList[i])
                 };
                 Debug.WriteLine($" time:{timeList[i]}, temp:{tempsList[i]} => pt:{pt}");
                 retVal.Add(pt);
@@ -187,36 +221,38 @@ namespace PZ3_NetworkService.ViewModel
                 return lhs.X.CompareTo(rhs.X);
             });
             int n = points.Count - 1;
-            double maxSafeY = this.ChartHeight - ConvertRange(this.minTemp, this.maxTemp, 0, this.ChartHeight, Model.ReactorModel.MIN_SAFE_TEMP_CELS) + this.MarginTop;
-            double minSafeY = this.ChartHeight - ConvertRange(this.minTemp, this.maxTemp, 0, this.ChartHeight, Model.ReactorModel.MAX_SAFE_TEMP_CELS) + this.MarginTop;
+            double maxSafeY = this.ScaleTemp(this.minTemp, this.maxTemp, Model.ReactorModel.MIN_SAFE_TEMP_CELS);
+            double minSafeY = this.ScaleTemp(this.minTemp, this.maxTemp, Model.ReactorModel.MAX_SAFE_TEMP_CELS);
             for (int i = 0; i < n; ++i)
             {
                 Color col = Colors.Green;
-                double maxSafeX = LineEquationGetX(points[i], points[i + 1], maxSafeY);
-                double minSafeX = LineEquationGetX(points[i], points[i + 1], minSafeY);
+                double maxSafeX = this.LineEquationGetX(points[i], points[i + 1], maxSafeY);
+                double minSafeX = this.LineEquationGetX(points[i], points[i + 1], minSafeY);
                 Point minSafePoint = new Point(minSafeX, minSafeY);
                 Point maxSafePoint = new Point(maxSafeX, maxSafeY);
                 Point leftPoint = points[i];
                 Point rightPoint = points[i + 1];
-                
-                if((leftPoint.Y > maxSafeY && rightPoint.Y > maxSafeY) 
+
+                if ((leftPoint.Y > maxSafeY && rightPoint.Y > maxSafeY)
                     || (leftPoint.Y < minSafeY && rightPoint.Y < minSafeY))
                 {
                     col = Colors.Red;
-                } else if(leftPoint.Y > rightPoint.Y) 
+                }
+                else if (leftPoint.Y > rightPoint.Y)
                 {
-                    if(leftPoint.Y > maxSafeY && rightPoint.Y < maxSafeY)
+                    if (leftPoint.Y > maxSafeY && rightPoint.Y < maxSafeY)
                     {
                         retVal.Add(new MyLine(leftPoint, maxSafePoint, Colors.Red));
                         leftPoint = maxSafePoint;
                     }
-                    if(rightPoint.Y < minSafeY && leftPoint.Y > minSafeY)
+                    if (rightPoint.Y < minSafeY && leftPoint.Y > minSafeY)
                     {
                         retVal.Add(new MyLine(leftPoint, minSafePoint, Colors.Green));
                         leftPoint = minSafePoint;
                         col = Colors.Red;
                     }
-                } else 
+                }
+                else
                 {
                     if (leftPoint.Y < minSafeY && rightPoint.Y > minSafeY)
                     {
