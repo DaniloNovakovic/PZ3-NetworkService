@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -33,13 +34,16 @@ namespace PZ3_NetworkService.ViewModel
             this.X2 = p2.X;
             this.Y2 = p2.Y;
         }
+        public override string ToString()
+        {
+            return $"({X1},{Y1}):({X2},{Y2})";
+        }
     }
     public class DataChartViewModel : BindableBase
     {
         public MyICommand ShowChartCommand { get; set; }
         public BindingList<Model.ReactorModel> Reactors { get; private set; }
-        public ObservableCollection<MyLine> Lines { get; set; } = new ObservableCollection<MyLine>();
-        public List<Point> Points { get; set; } = new List<Point>();
+        public BindingList<MyLine> Lines { get; set; } = new BindingList<MyLine>();
 
         public Model.ReactorModel SelectedReactor { get; set; }
 
@@ -73,18 +77,12 @@ namespace PZ3_NetworkService.ViewModel
             var tuple = this.FetchFromLog(this.SelectedReactor.Id, this.Limit);
             List<DateTime> timeList = tuple.Item1;
             List<double> tempsList = tuple.Item2;
-            this.Points = this.ConvertToPoints(timeList, tempsList);
+            List<Point> points = this.ConvertToPoints(timeList, tempsList);
+            List<MyLine> myLines = ConnectPoints(points);
+            this.Lines = new BindingList<MyLine>(myLines);
+            OnPropertyChanged("Lines");
         }
-        public List<Point> ConvertToPoints(List<DateTime> timeList, List<double> tempsList)
-        {
-            var retVal = new List<Point>();
-            var maxTime = timeList.Max();
-            var minTime = timeList.Min();
-            var maxTemp = tempsList.Max();
-            var minTemp = tempsList.Min();
 
-            return retVal;
-        }
         /// <summary>
         /// Finds 'N' number of last changes for reactor with given id and returns Tuple(timeVals, temperatures)
         /// </summary>
@@ -126,6 +124,46 @@ namespace PZ3_NetworkService.ViewModel
             }
             return new Tuple<List<DateTime>, List<double>>(timeList, tempList);
         }
+        public List<Point> ConvertToPoints(List<DateTime> timeList, List<double> tempsList)
+        {
+            var retVal = new List<Point>();
+            var maxTime = timeList.Max();
+            var minTime = timeList.Min();
+            var maxTemp = tempsList.Max();
+            var minTemp = tempsList.Min();
+
+            int n = Math.Min(timeList.Count, tempsList.Count);
+            for (int i = 0; i < n; ++i)
+            {
+                Point pt = new Point
+                {
+                    X = ConvertRange(minTime, maxTime, 0, this.ChartWidth, timeList[i]),
+                    Y = ChartHeight - ConvertRange(minTemp, maxTemp, 0, this.ChartHeight, tempsList[i])
+                };
+                Debug.WriteLine(pt);
+                retVal.Add(pt);
+            }
+
+            return retVal;
+        }
+        public List<MyLine> ConnectPoints(List<Point> points)
+        {
+            var retVal = new List<MyLine>();
+            int n = points.Count - 1;
+            for (int i = 0; i < n; ++i)
+            {
+                MyLine line = new MyLine(points[i], points[i + 1]);
+                Debug.WriteLine(line);
+                retVal.Add(line);
+            }
+            return retVal;
+        }
+        public static double ConvertToUnixTimestamp(DateTime date)
+        {
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            TimeSpan diff = date.ToUniversalTime() - origin;
+            return Math.Floor(diff.TotalSeconds);
+        }
 
         #region ConvertRange
         public static int ConvertRange(
@@ -135,6 +173,16 @@ namespace PZ3_NetworkService.ViewModel
         {
             double scale = (double)(newEnd - newStart) / (originalEnd - originalStart);
             return (int)(newStart + ((value - originalStart) * scale));
+        }
+        public static double ConvertRange(
+            DateTime originalStart, DateTime originalEnd,
+            double newStart, double newEnd,
+            DateTime value)
+        {
+            double dTime = ConvertToUnixTimestamp(value);
+            double dTimeStart = ConvertToUnixTimestamp(originalStart);
+            double dTimeEnd = ConvertToUnixTimestamp(originalEnd);
+            return ConvertRange(dTimeStart, dTimeEnd, newStart, newEnd, dTime);
         }
         public static double ConvertRange(
             double originalStart, double originalEnd,
