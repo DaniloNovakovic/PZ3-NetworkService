@@ -43,15 +43,31 @@
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0" Margin="5">
-            <Menu DockPanel.Dock="Top">
+            <Menu DockPanel.Dock="Top" IsMainMenu="True">
                 <MenuItem Header="Network" Command="{Binding NavCommand}"
-                          CommandParameter="network"/>
+                          CommandParameter="network">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="Network" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="Network Data" Command="{Binding NavCommand}"
-                          CommandParameter="networkData"/>
+                          CommandParameter="networkData">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="Database" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="Data Chart" Command="{Binding NavCommand}"
-                          CommandParameter="dataChart"/>
+                          CommandParameter="dataChart">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="ChartBar" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="Report" Command="{Binding NavCommand}"
-                          CommandParameter="report"/>
+                          CommandParameter="report">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="FileReport" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </Menu>
         </DockPanel>
         <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" Grid.ColumnSpan="2" Margin="20,10,20,10"/>
