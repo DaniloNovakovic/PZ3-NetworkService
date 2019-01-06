@@ -22,12 +22,13 @@ namespace PZ3_NetworkService.ViewModel
 
         public SolidColorBrush Brush { get; set; }
 
-        public MyLine(double x1 = 0, double y1 = 0, double x2 = 0, double y2 = 0)
+        public MyLine(double x1 = 0, double y1 = 0, double x2 = 0, double y2 = 0, Color? brushColor = null)
         {
             this.X1 = x1;
             this.Y1 = y1;
             this.X2 = x2;
             this.Y2 = y2;
+            this.Brush = new SolidColorBrush(brushColor ?? Colors.Green);
         }
         public MyLine(Point p1, Point p2, Color? brushColor = null)
         {
@@ -35,6 +36,7 @@ namespace PZ3_NetworkService.ViewModel
             this.Y1 = p1.Y;
             this.X2 = p2.X;
             this.Y2 = p2.Y;
+            this.Brush = new SolidColorBrush(brushColor ?? Colors.Green);
         }
         public override string ToString()
         {
@@ -57,6 +59,10 @@ namespace PZ3_NetworkService.ViewModel
         }
 
         public Model.ReactorModel SelectedReactor { get; set; }
+        private DateTime maxTime;
+        private DateTime minTime;
+        private double maxTemp;
+        private double minTemp;
 
         public int MarginTop { get; private set; } = 50;
         public int MarginLeft { get; private set; } = 50;
@@ -97,6 +103,13 @@ namespace PZ3_NetworkService.ViewModel
             List<Point> points = this.ConvertToPoints(timeList, tempsList);
             List<MyLine> myLines = this.ConnectPoints(points);
             this.Lines = new ObservableCollection<MyLine>(myLines);
+        }
+        public void AddAxesLines(ref List<MyLine> myLines)
+        {
+            if (myLines is null)
+            {
+                myLines = new List<MyLine>();
+            }
         }
 
         /// <summary>
@@ -143,19 +156,19 @@ namespace PZ3_NetworkService.ViewModel
         public List<Point> ConvertToPoints(List<DateTime> timeList, List<double> tempsList)
         {
             var retVal = new List<Point>();
-            var maxTime = timeList.Max();
-            var minTime = timeList.Min();
-            var maxTemp = tempsList.Max();
-            var minTemp = tempsList.Min();
+            this.maxTime = timeList.Max();
+            this.minTime = timeList.Min();
+            this.maxTemp = tempsList.Max();
+            this.minTemp = tempsList.Min();
 
             int n = Math.Min(timeList.Count, tempsList.Count);
             for (int i = 0; i < n; ++i)
             {
                 Point pt = new Point
                 {
-                    X = ConvertRange(minTime, maxTime, 0, this.ChartWidth, timeList[i]) + this.MarginLeft,
+                    X = ConvertRange(this.minTime, this.maxTime, 0, this.ChartWidth, timeList[i]) + this.MarginLeft,
                     //X = ConvertRange(n, 0, 0, this.ChartWidth, i) + this.MarginLeft,
-                    Y = this.ChartHeight - ConvertRange(minTemp, maxTemp, 0, this.ChartHeight, tempsList[i]) + this.MarginTop
+                    Y = this.ChartHeight - ConvertRange(this.minTemp, this.maxTemp, 0, this.ChartHeight, tempsList[i]) + this.MarginTop
                 };
                 Debug.WriteLine($" time:{timeList[i]}, temp:{tempsList[i]} => pt:{pt}");
                 retVal.Add(pt);
@@ -166,14 +179,66 @@ namespace PZ3_NetworkService.ViewModel
         public List<MyLine> ConnectPoints(List<Point> points)
         {
             var retVal = new List<MyLine>();
+            points.Sort((lhs, rhs) =>
+            {
+                return lhs.X.CompareTo(rhs.X);
+            });
             int n = points.Count - 1;
+            double maxSafeY = this.ChartHeight - ConvertRange(this.minTemp, this.maxTemp, 0, this.ChartHeight, Model.ReactorModel.MIN_SAFE_TEMP_CELS) + this.MarginTop;
+            double minSafeY = this.ChartHeight - ConvertRange(this.minTemp, this.maxTemp, 0, this.ChartHeight, Model.ReactorModel.MAX_SAFE_TEMP_CELS) + this.MarginTop;
             for (int i = 0; i < n; ++i)
             {
-                MyLine line = new MyLine(points[i], points[i + 1]);
+                Color col = Colors.Green;
+                double maxSafeX = LineEquationGetX(points[i], points[i + 1], maxSafeY);
+                double minSafeX = LineEquationGetX(points[i], points[i + 1], minSafeY);
+                Point minSafePoint = new Point(minSafeX, minSafeY);
+                Point maxSafePoint = new Point(maxSafeX, maxSafeY);
+                Point leftPoint = points[i];
+                Point rightPoint = points[i + 1];
+                
+                if((leftPoint.Y > maxSafeY && rightPoint.Y > maxSafeY) 
+                    || (leftPoint.Y < minSafeY && rightPoint.Y < minSafeY))
+                {
+                    col = Colors.Red;
+                } else if(leftPoint.Y > rightPoint.Y) 
+                {
+                    if(leftPoint.Y > maxSafeY && rightPoint.Y < maxSafeY)
+                    {
+                        retVal.Add(new MyLine(leftPoint, maxSafePoint, Colors.Red));
+                        leftPoint = maxSafePoint;
+                    }
+                    if(rightPoint.Y < minSafeY && leftPoint.Y > minSafeY)
+                    {
+                        retVal.Add(new MyLine(leftPoint, minSafePoint, Colors.Green));
+                        leftPoint = minSafePoint;
+                        col = Colors.Red;
+                    }
+                } else 
+                {
+                    if (leftPoint.Y < minSafeY && rightPoint.Y > minSafeY)
+                    {
+                        retVal.Add(new MyLine(leftPoint, minSafePoint, Colors.Red));
+                        leftPoint = minSafePoint;
+                    }
+                    if (rightPoint.Y > maxSafeY && leftPoint.Y < maxSafeY)
+                    {
+                        retVal.Add(new MyLine(leftPoint, maxSafePoint, Colors.Green));
+                        leftPoint = maxSafePoint;
+                        col = Colors.Red;
+                    }
+                }
+
+                MyLine line = new MyLine(leftPoint, rightPoint, col);
                 Debug.WriteLine(line);
                 retVal.Add(line);
             }
             return retVal;
+        }
+        public double LineEquationGetX(Point p1, Point p2, double y)
+        {
+            double k = (p2.Y - p1.Y) / (p2.X - p1.X);
+            double n = p1.Y - k * p1.X;
+            return (y - n) / k;
         }
         public static double ConvertToUnixTimestamp(DateTime date)
         {
