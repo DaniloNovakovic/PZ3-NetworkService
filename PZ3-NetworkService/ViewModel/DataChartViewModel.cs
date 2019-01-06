@@ -64,10 +64,10 @@ namespace PZ3_NetworkService.ViewModel
         private double maxTemp;
         private double minTemp;
 
-        public int MarginTop { get; private set; } = 50;
+        public int MarginTop { get; private set; } = 0;
         public int MarginLeft { get; private set; } = 50;
         public int MarginBottom { get; private set; } = 50;
-        public int MarginRight { get; private set; } = 50;
+        public int MarginRight { get; private set; } = 0;
         public int CanvasHeight { get; private set; } = 300;
         public int CanvasWidth { get; private set; } = 500;
         public int ChartHeight { get => this.CanvasHeight - (this.MarginTop + this.MarginBottom); }
@@ -102,6 +102,7 @@ namespace PZ3_NetworkService.ViewModel
             List<double> tempsList = tuple.Item2;
             List<Point> points = this.ConvertToPoints(timeList, tempsList);
             List<MyLine> myLines = this.ConnectPoints(points);
+            AddAxesLines(ref myLines);
             this.Lines = new ObservableCollection<MyLine>(myLines);
         }
         public void AddAxesLines(ref List<MyLine> myLines)
@@ -110,6 +111,8 @@ namespace PZ3_NetworkService.ViewModel
             {
                 myLines = new List<MyLine>();
             }
+            myLines.Add(new MyLine(MarginLeft, MarginTop, MarginLeft, MarginTop + ChartHeight, Colors.Purple));
+            myLines.Add(new MyLine(MarginLeft, MarginTop + ChartHeight, MarginLeft + ChartWidth, MarginTop + ChartHeight, Colors.Purple));
         }
 
         /// <summary>
