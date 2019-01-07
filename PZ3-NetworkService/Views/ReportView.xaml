@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PZ3_NetworkService.Views"
+             xmlns:components="clr-namespace:PZ3_NetworkService.Components"
              xmlns:viewModel="clr-namespace:PZ3_NetworkService.ViewModel"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
@@ -43,8 +44,17 @@
             <materialDesign:PackIcon Kind="Show" Height="24" Width="24" />
         </Button>
 
+        <!--
         <ScrollViewer Grid.Row="1" Grid.ColumnSpan="4"  Margin="20" BorderThickness="3" BorderBrush="Gray">
             <TextBlock Text="{Binding TextReport}" Style="{StaticResource MaterialDesignBody1TextBlock}" />
         </ScrollViewer>
+        -->
+        <components:BindableRichTextBox Grid.Row="1" Grid.ColumnSpan="4" Document="{Binding FlowDoc}" IsReadOnly="True" Margin="20" BorderThickness="3" BorderBrush="Gray" VerticalScrollBarVisibility="Visible">
+            <RichTextBox.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </RichTextBox.Resources>
+        </components:BindableRichTextBox>
     </Grid>
 </UserControl>
