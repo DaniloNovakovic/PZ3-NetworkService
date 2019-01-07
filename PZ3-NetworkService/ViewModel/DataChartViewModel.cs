@@ -44,6 +44,7 @@ namespace PZ3_NetworkService.ViewModel
         public string Content { get; set; } = string.Empty;
         public double X { get; set; } = 0;
         public double Y { get; set; } = 0;
+        public double Angle { get; set; } = 0;
     }
     public class DataChartViewModel : BindableBase
     {
@@ -78,8 +79,8 @@ namespace PZ3_NetworkService.ViewModel
 
         public int MarginTop { get; private set; } = 10;
         public int MarginLeft { get; private set; } = 50;
-        public int MarginBottom { get; private set; } = 50;
-        public int MarginRight { get; private set; } = 10;
+        public int MarginBottom { get; private set; } = 60;
+        public int MarginRight { get; private set; } = 30;
         public int CanvasHeight { get; private set; } = 350;
         public int CanvasWidth { get; private set; } = 600;
         public int ChartHeight { get => this.CanvasHeight - (this.MarginTop + this.MarginBottom); }
@@ -97,7 +98,8 @@ namespace PZ3_NetworkService.ViewModel
                 }
             }
         }
-        private double LabelSpace => this.ChartHeight / 5;
+        private double yLabelSpace => this.ChartHeight / 5;
+        private double xLabelSpace => this.ChartWidth / 5;
 
         public DataChartViewModel()
         {
@@ -117,6 +119,7 @@ namespace PZ3_NetworkService.ViewModel
             List<MyLine> myLines = this.ConnectPoints(points);
             this.AddAxesLines(ref myLines);
             this.AddHorizontalLines(ref myLines, tempsList);
+            this.AddVerticalLines(ref myLines, timeList);
             this.Lines = new ObservableCollection<MyLine>(myLines);
 
             List<MyLabel> labels = new List<MyLabel>();
@@ -129,13 +132,24 @@ namespace PZ3_NetworkService.ViewModel
             {
                 myLabels = new List<MyLabel>();
             }
-            for (double y = this.MarginTop; y < this.ChartHeight + MarginBottom; y += this.LabelSpace)
+            for (double y = this.MarginTop; y <= this.ChartHeight + MarginTop; y += this.yLabelSpace)
             {
                 MyLabel label = new MyLabel()
                 {
                     Content = string.Format("{0:0.0}", this.ScalePointToTemp(y, this.minTemp, this.maxTemp)),
                     X = 0,
-                    Y = y - 5
+                    Y = y - 10
+                };
+                myLabels.Add(label);
+            }
+            for (double x = this.MarginLeft; x <= this.ChartWidth + MarginLeft; x += this.xLabelSpace)
+            {
+                MyLabel label = new MyLabel()
+                {
+                    Content = ScalePointToTime(x, this.minTime, this.maxTime).ToString(@"dd/MM/yyyy HH:mm:ss"),
+                    X = x - 10,
+                    Y = MarginTop + ChartHeight,
+                    Angle = 30
                 };
                 myLabels.Add(label);
             }
@@ -155,11 +169,24 @@ namespace PZ3_NetworkService.ViewModel
             {
                 myLines = new List<MyLine>();
             }
-            for (double y = this.MarginTop; y < this.ChartHeight; y += this.LabelSpace)
+            for (double y = this.MarginTop; y < this.ChartHeight; y += this.yLabelSpace)
             {
                 MyLine line = new MyLine(this.MarginLeft, y, this.MarginLeft + this.ChartWidth, y, Colors.Purple, 0.3);
                 myLines.Add(line);
             }
+        }
+        public void AddVerticalLines(ref List<MyLine> myLines, List<DateTime> timesList)
+        {
+            if (myLines is null)
+            {
+                myLines = new List<MyLine>();
+            }
+            for (double x = this.MarginLeft; x <= this.ChartWidth + MarginLeft; x += this.xLabelSpace)
+            {
+                MyLine line = new MyLine(x, this.MarginTop, x, this.MarginTop + this.ChartHeight, Colors.Purple, 0.3);
+                myLines.Add(line);
+            }
+
         }
 
         /// <summary>
@@ -202,6 +229,15 @@ namespace PZ3_NetworkService.ViewModel
                 }
             }
             return new Tuple<List<DateTime>, List<double>>(timeList, tempList);
+        }
+        public DateTime ScalePointToTime(double x, DateTime minTime, DateTime maxTime)
+        {
+            double dTimeStart = ConvertToUnixTimestamp(minTime);
+            double dTimeEnd = ConvertToUnixTimestamp(maxTime);
+            double dTime = ConvertRange(0, this.ChartWidth, dTimeStart, dTimeEnd, x - this.MarginLeft);
+            TimeSpan ts = TimeSpan.FromSeconds(dTime);
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            return origin + ts;
         }
         public double ScalePointToTemp(double y, double minTemp, double maxTemp)
         {
