@@ -118,6 +118,27 @@ namespace PZ3_NetworkService.ViewModel
             this.AddAxesLines(ref myLines);
             this.AddHorizontalLines(ref myLines, tempsList);
             this.Lines = new ObservableCollection<MyLine>(myLines);
+
+            List<MyLabel> labels = new List<MyLabel>();
+            AddLabels(ref labels);
+            this.Labels = new ObservableCollection<MyLabel>(labels);
+        }
+        public void AddLabels(ref List<MyLabel> myLabels)
+        {
+            if (myLabels is null)
+            {
+                myLabels = new List<MyLabel>();
+            }
+            for (double y = this.MarginTop; y < this.ChartHeight + MarginBottom; y += this.LabelSpace)
+            {
+                MyLabel label = new MyLabel()
+                {
+                    Content = string.Format("{0:0.0}", this.ScalePointToTemp(y, this.minTemp, this.maxTemp)),
+                    X = 0,
+                    Y = y - 5
+                };
+                myLabels.Add(label);
+            }
         }
         public void AddAxesLines(ref List<MyLine> myLines)
         {
@@ -136,7 +157,7 @@ namespace PZ3_NetworkService.ViewModel
             }
             for (double y = this.MarginTop; y < this.ChartHeight; y += this.LabelSpace)
             {
-                MyLine line = new MyLine(MarginLeft, y, MarginLeft + ChartWidth, y, Colors.Purple, 0.3);
+                MyLine line = new MyLine(this.MarginLeft, y, this.MarginLeft + this.ChartWidth, y, Colors.Purple, 0.3);
                 myLines.Add(line);
             }
         }
@@ -181,6 +202,11 @@ namespace PZ3_NetworkService.ViewModel
                 }
             }
             return new Tuple<List<DateTime>, List<double>>(timeList, tempList);
+        }
+        public double ScalePointToTemp(double y, double minTemp, double maxTemp)
+        {
+            double tempY = y - this.MarginTop;
+            return ConvertRange(0, this.ChartHeight, maxTemp, minTemp, tempY);
         }
         public double ScaleTemp(double minTemp, double maxTemp, double temperature)
         {

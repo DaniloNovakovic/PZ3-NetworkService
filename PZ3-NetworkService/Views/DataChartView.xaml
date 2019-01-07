@@ -45,7 +45,26 @@
             </Button>
         </Grid>
 
-        <ItemsControl Grid.Row="1" Margin="20" ItemsSource="{Binding Path=Lines}">
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Path=Labels}" >
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Background="Transparent" Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type viewModel:MyLabel}">
+                    <TextBlock Text="{Binding Content}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Canvas.Top" Value="{Binding Path=Y}" />
+                    <Setter Property="Canvas.Left" Value="{Binding Path=X}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Path=Lines}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas Background="Transparent" Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
