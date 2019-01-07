@@ -16,6 +16,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        
+        <!-- Buttons and User input -->
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
@@ -45,6 +47,8 @@
             </Button>
         </Grid>
 
+        <!-- Chart bindings -->
+        <!-- Labels -->
         <ItemsControl Grid.Row="1" ItemsSource="{Binding Path=Labels}" >
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -68,6 +72,7 @@
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
 
+        <!-- Lines -->
         <ItemsControl Grid.Row="1" ItemsSource="{Binding Path=Lines}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -79,6 +84,26 @@
                     <Line Stroke="{Binding Brush}" Opacity="{Binding Opacity}" StrokeThickness="2" X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
+        <!-- Points with tooltip -->
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Path=Points}" >
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Background="Transparent" Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type viewModel:MyLabel}">
+                    <Ellipse Fill="Purple" ToolTip="{Binding ToolTip}" Height="{Binding R}" Width="{Binding R}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Canvas.Top" Value="{Binding Path=cY}" />
+                    <Setter Property="Canvas.Left" Value="{Binding Path=cX}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
         </ItemsControl>
     </Grid>
 </UserControl>
