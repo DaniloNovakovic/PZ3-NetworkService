@@ -20,7 +20,7 @@ namespace PZ3_NetworkService
         public MainWindowViewModel()
         {
             this.NavCommand = new MyICommand<string>(this.OnNav);
-            this.CurrentViewModel = this.dataChartViewModel;
+            this.CurrentViewModel = this.reportViewModel;
         }
 
         public BindableBase CurrentViewModel
