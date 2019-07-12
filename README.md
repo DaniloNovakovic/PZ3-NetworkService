@@ -9,6 +9,10 @@ School project from Human Computer Interaction course in Applied Software Engine
 - [Getting Started](#Getting-Started)
 - [MeteringSimulator](#Metering-Simulator)
 - [PZ3-NetworkService](#PZ3-NetworkService)
+  - [Network](#Network)
+  - [Network Data](#Network-Data)
+  - [Data Chart](#Data-Chart)
+  - [Report](#Report)
 
 ## Getting Started
 
