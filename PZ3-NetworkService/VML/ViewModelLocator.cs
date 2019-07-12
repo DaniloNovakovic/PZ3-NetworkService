@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace PZ3_NetworkService.VML
@@ -37,11 +33,11 @@ namespace PZ3_NetworkService.VML
             var viewType = d.GetType();
             string str = viewType.FullName;
             str = str.Replace(".Views", ".ViewModel");
-            var viewTypeName = str;
+            string viewTypeName = str;
 
-            var viewModelTypeName = viewTypeName + "Model";
+            string viewModelTypeName = viewTypeName + "Model";
             var viewModelType = Type.GetType(viewModelTypeName);
-            var viewModel = Activator.CreateInstance(viewModelType);
+            object viewModel = Activator.CreateInstance(viewModelType);
 
             ((FrameworkElement)d).DataContext = viewModel;
         }

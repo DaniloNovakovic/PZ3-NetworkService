@@ -1,26 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace PZ3_NetworkService
 {
     public class MyICommand : ICommand
     {
-        Action _TargetExecuteMethod;
-        Func<bool> _TargetCanExecuteMethod;
+        private readonly Action _TargetExecuteMethod;
+        private readonly Func<bool> _TargetCanExecuteMethod;
 
         public MyICommand(Action executeMethod)
         {
-            _TargetExecuteMethod = executeMethod;
+            this._TargetExecuteMethod = executeMethod;
         }
 
         public MyICommand(Action executeMethod, Func<bool> canExecuteMethod)
         {
-            _TargetExecuteMethod = executeMethod;
-            _TargetCanExecuteMethod = canExecuteMethod;
+            this._TargetExecuteMethod = executeMethod;
+            this._TargetCanExecuteMethod = canExecuteMethod;
         }
 
         public void RaiseCanExecuteChanged()
@@ -30,13 +26,12 @@ namespace PZ3_NetworkService
 
         bool ICommand.CanExecute(object parameter)
         {
-
-            if (_TargetCanExecuteMethod != null)
+            if (this._TargetCanExecuteMethod != null)
             {
-                return _TargetCanExecuteMethod();
+                return this._TargetCanExecuteMethod();
             }
 
-            if (_TargetExecuteMethod != null)
+            if (this._TargetExecuteMethod != null)
             {
                 return true;
             }
@@ -48,16 +43,17 @@ namespace PZ3_NetworkService
 
         void ICommand.Execute(object parameter)
         {
-            if (_TargetExecuteMethod != null)
+            if (this._TargetExecuteMethod != null)
             {
-                _TargetExecuteMethod();
+                this._TargetExecuteMethod();
             }
         }
     }
+
     public class MyICommand<T> : ICommand
     {
-        private Action<T> _TargetExecuteMethod;
-        private Func<T, bool> _TargetCanExecuteMethod;
+        private readonly Action<T> _TargetExecuteMethod;
+        private readonly Func<T, bool> _TargetCanExecuteMethod;
 
         public MyICommand(Action<T> executeMethod)
         {
@@ -79,10 +75,9 @@ namespace PZ3_NetworkService
 
         bool ICommand.CanExecute(object parameter)
         {
-
             if (this._TargetCanExecuteMethod != null)
             {
-                T tparm = (T)parameter;
+                var tparm = (T)parameter;
                 return this._TargetCanExecuteMethod(tparm);
             }
 
@@ -101,6 +96,6 @@ namespace PZ3_NetworkService
             this._TargetExecuteMethod?.Invoke((T)parameter);
         }
 
-        #endregion
+        #endregion ICommand Members
     }
 }

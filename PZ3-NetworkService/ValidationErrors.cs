@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace PZ3_NetworkService
 {
@@ -25,8 +21,6 @@ namespace PZ3_NetworkService
                 return this.validationErrors.ContainsKey(fieldName) ?
                     this.validationErrors[fieldName] : string.Empty;
             }
-
-
 
             set
             {

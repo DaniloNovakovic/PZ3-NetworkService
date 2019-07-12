@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:PZ3_NetworkService.Components">
 
-
     <Style TargetType="{x:Type local:BindableRichTextBox}">
         <Setter Property="Template">
             <Setter.Value>

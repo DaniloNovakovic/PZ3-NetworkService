@@ -1,61 +1,61 @@
 ﻿<UserControl x:Class="PZ3_NetworkService.Views.NetworkView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PZ3_NetworkService.Views"
              xmlns:viewModel="clr-namespace:PZ3_NetworkService.ViewModel"
              xmlns:dd="urn:gong-wpf-dragdrop"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.DataContext>
-        <viewModel:NetworkViewModel/>
+        <viewModel:NetworkViewModel />
     </UserControl.DataContext>
 
     <UserControl.Resources>
         <DataTemplate DataType="{x:Type viewModel:ReactorCellViewModel}">
-            <local:ReactorCellView/>
+            <local:ReactorCellView />
         </DataTemplate>
     </UserControl.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
 
         <!-- Data Grid -->
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
 
-            <local:ReactorCellView Grid.Row="0" Grid.Column="0" Padding="10,5,10,0"/>
-            <local:ReactorCellView Grid.Row="0" Grid.Column="1" Padding="10,5,10,0"/>
-            <local:ReactorCellView Grid.Row="0" Grid.Column="2" Padding="10,5,10,0"/>
-            <local:ReactorCellView Grid.Row="0" Grid.Column="3" Padding="10,5,10,0"/>
-            <local:ReactorCellView Grid.Row="1" Grid.Column="0" Padding="10,5,10,0"/>
-            <local:ReactorCellView Grid.Row="1" Grid.Column="1" Padding="10,5,10,0"/>
-            <local:ReactorCellView Grid.Row="1" Grid.Column="2" Padding="10,5,10,0"/>
-            <local:ReactorCellView Grid.Row="1" Grid.Column="3" Padding="10,5,10,0"/>
-            <local:ReactorCellView Grid.Row="2" Grid.Column="0" Padding="10,5,10,0"/>
-            <local:ReactorCellView Grid.Row="2" Grid.Column="1" Padding="10,5,10,0"/>
-            <local:ReactorCellView Grid.Row="2" Grid.Column="2" Padding="10,5,10,0"/>
-            <local:ReactorCellView Grid.Row="2" Grid.Column="3" Padding="10,5,10,0"/>
-            <local:ReactorCellView Grid.Row="3" Grid.Column="0" Padding="10,5,10,0"/>
-            <local:ReactorCellView Grid.Row="3" Grid.Column="1" Padding="10,5,10,0"/>
-            <local:ReactorCellView Grid.Row="3" Grid.Column="2" Padding="10,5,10,0"/>
-            <local:ReactorCellView Grid.Row="3" Grid.Column="3" Padding="10,5,10,0"/>
+            <local:ReactorCellView Grid.Row="0" Grid.Column="0" Padding="10,5,10,0" />
+            <local:ReactorCellView Grid.Row="0" Grid.Column="1" Padding="10,5,10,0" />
+            <local:ReactorCellView Grid.Row="0" Grid.Column="2" Padding="10,5,10,0" />
+            <local:ReactorCellView Grid.Row="0" Grid.Column="3" Padding="10,5,10,0" />
+            <local:ReactorCellView Grid.Row="1" Grid.Column="0" Padding="10,5,10,0" />
+            <local:ReactorCellView Grid.Row="1" Grid.Column="1" Padding="10,5,10,0" />
+            <local:ReactorCellView Grid.Row="1" Grid.Column="2" Padding="10,5,10,0" />
+            <local:ReactorCellView Grid.Row="1" Grid.Column="3" Padding="10,5,10,0" />
+            <local:ReactorCellView Grid.Row="2" Grid.Column="0" Padding="10,5,10,0" />
+            <local:ReactorCellView Grid.Row="2" Grid.Column="1" Padding="10,5,10,0" />
+            <local:ReactorCellView Grid.Row="2" Grid.Column="2" Padding="10,5,10,0" />
+            <local:ReactorCellView Grid.Row="2" Grid.Column="3" Padding="10,5,10,0" />
+            <local:ReactorCellView Grid.Row="3" Grid.Column="0" Padding="10,5,10,0" />
+            <local:ReactorCellView Grid.Row="3" Grid.Column="1" Padding="10,5,10,0" />
+            <local:ReactorCellView Grid.Row="3" Grid.Column="2" Padding="10,5,10,0" />
+            <local:ReactorCellView Grid.Row="3" Grid.Column="3" Padding="10,5,10,0" />
         </Grid>
 
         <!-- Listview -->

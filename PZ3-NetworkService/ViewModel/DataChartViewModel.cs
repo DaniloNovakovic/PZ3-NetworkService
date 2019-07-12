@@ -5,10 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Media;
 
 namespace PZ3_NetworkService.ViewModel
@@ -32,13 +29,16 @@ namespace PZ3_NetworkService.ViewModel
             this.Brush = new SolidColorBrush(brushColor ?? Colors.Green);
             this.Opacity = opacity;
         }
+
         public MyLine(MyPoint p1, MyPoint p2, Color? brushColor = null, double opacity = 1)
             : this(p1.X, p1.Y, p2.X, p2.Y, brushColor, opacity) { }
+
         public override string ToString()
         {
             return $"({this.X1},{this.Y1}):({this.X2},{this.Y2})";
         }
     }
+
     public class MyLabel
     {
         public string Content { get; set; } = string.Empty;
@@ -46,13 +46,14 @@ namespace PZ3_NetworkService.ViewModel
         public double Y { get; set; } = 0;
         public double Angle { get; set; } = 0;
     }
+
     public class MyPoint
     {
         public string ToolTip { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
-        public double cX { get => X - R / 2; }
-        public double cY { get => Y - R / 2; }
+        public double cX { get => this.X - this.R / 2; }
+        public double cY { get => this.Y - this.R / 2; }
         public double R { get; set; }
         public Color Color { get; set; }
 
@@ -65,11 +66,13 @@ namespace PZ3_NetworkService.ViewModel
             this.Color = color ?? Colors.Purple;
         }
     }
+
     public class DataChartViewModel : BindableBase
     {
         public MyICommand ShowChartCommand { get; set; }
         public BindingList<Model.ReactorModel> Reactors { get; private set; }
         private ObservableCollection<MyLine> lines = new ObservableCollection<MyLine>();
+
         public ObservableCollection<MyLine> Lines
         {
             get => this.lines;
@@ -79,7 +82,9 @@ namespace PZ3_NetworkService.ViewModel
                 this.OnPropertyChanged("Lines");
             }
         }
+
         private ObservableCollection<MyPoint> points = new ObservableCollection<MyPoint>();
+
         public ObservableCollection<MyPoint> Points
         {
             get => this.points;
@@ -89,7 +94,9 @@ namespace PZ3_NetworkService.ViewModel
                 this.OnPropertyChanged("Points");
             }
         }
+
         private ObservableCollection<MyLabel> labels = new ObservableCollection<MyLabel>();
+
         public ObservableCollection<MyLabel> Labels
         {
             get => this.labels;
@@ -115,6 +122,7 @@ namespace PZ3_NetworkService.ViewModel
         public int ChartHeight { get => this.CanvasHeight - (this.MarginTop + this.MarginBottom); }
         public int ChartWidth { get => this.CanvasWidth - (this.MarginLeft + this.MarginRight); }
         private int limit = 10;
+
         public int Limit
         {
             get => this.limit;
@@ -127,6 +135,7 @@ namespace PZ3_NetworkService.ViewModel
                 }
             }
         }
+
         private double yLabelSpace => this.ChartHeight / 5;
         private double xLabelSpace => this.ChartWidth / 5;
 
@@ -139,13 +148,14 @@ namespace PZ3_NetworkService.ViewModel
             }
             this.ShowChartCommand = new MyICommand(this.OnShowChart);
         }
+
         public void OnShowChart()
         {
             var tuple = this.FetchFromLog(this.SelectedReactor.Id, this.Limit);
-            List<DateTime> timeList = tuple.Item1;
-            List<double> tempsList = tuple.Item2;
-            List<MyPoint> myPoints = this.ConvertToPoints(timeList, tempsList);
-            List<MyLine> myLines = this.ConnectPoints(myPoints);
+            var timeList = tuple.Item1;
+            var tempsList = tuple.Item2;
+            var myPoints = this.ConvertToPoints(timeList, tempsList);
+            var myLines = this.ConnectPoints(myPoints);
             this.AddAxesLines(ref myLines);
             this.AddHorizontalLines(ref myLines, tempsList);
             this.AddVerticalLines(ref myLines, timeList);
@@ -153,10 +163,11 @@ namespace PZ3_NetworkService.ViewModel
 
             this.Points = new ObservableCollection<MyPoint>(myPoints);
 
-            List<MyLabel> labels = new List<MyLabel>();
+            var labels = new List<MyLabel>();
             this.AddLabels(ref labels);
             this.Labels = new ObservableCollection<MyLabel>(labels);
         }
+
         public void AddLabels(ref List<MyLabel> myLabels)
         {
             if (myLabels is null)
@@ -165,7 +176,7 @@ namespace PZ3_NetworkService.ViewModel
             }
             for (double y = this.MarginTop; y <= this.ChartHeight + this.MarginTop; y += this.yLabelSpace)
             {
-                MyLabel label = new MyLabel()
+                var label = new MyLabel()
                 {
                     Content = string.Format("{0:0.0}", this.ScalePointToTemp(y, this.minTemp, this.maxTemp)),
                     X = 0,
@@ -175,7 +186,7 @@ namespace PZ3_NetworkService.ViewModel
             }
             for (double x = this.MarginLeft; x <= this.ChartWidth + this.MarginLeft; x += this.xLabelSpace)
             {
-                MyLabel label = new MyLabel()
+                var label = new MyLabel()
                 {
                     Content = this.ScalePointToTime(x, this.minTime, this.maxTime).ToString(@"dd/MM/yyyy HH:mm:ss"),
                     X = x - 10,
@@ -185,6 +196,7 @@ namespace PZ3_NetworkService.ViewModel
                 myLabels.Add(label);
             }
         }
+
         public void AddAxesLines(ref List<MyLine> myLines)
         {
             if (myLines is null)
@@ -194,6 +206,7 @@ namespace PZ3_NetworkService.ViewModel
             myLines.Add(new MyLine(this.MarginLeft, this.MarginTop, this.MarginLeft, this.MarginTop + this.ChartHeight, Colors.Purple));
             myLines.Add(new MyLine(this.MarginLeft, this.MarginTop + this.ChartHeight, this.MarginLeft + this.ChartWidth, this.MarginTop + this.ChartHeight, Colors.Purple));
         }
+
         public void AddHorizontalLines(ref List<MyLine> myLines, List<double> tempsList)
         {
             if (myLines is null)
@@ -202,10 +215,11 @@ namespace PZ3_NetworkService.ViewModel
             }
             for (double y = this.MarginTop; y < this.ChartHeight; y += this.yLabelSpace)
             {
-                MyLine line = new MyLine(this.MarginLeft, y, this.MarginLeft + this.ChartWidth, y, Colors.Purple, 0.3);
+                var line = new MyLine(this.MarginLeft, y, this.MarginLeft + this.ChartWidth, y, Colors.Purple, 0.3);
                 myLines.Add(line);
             }
         }
+
         public void AddVerticalLines(ref List<MyLine> myLines, List<DateTime> timesList)
         {
             if (myLines is null)
@@ -214,10 +228,9 @@ namespace PZ3_NetworkService.ViewModel
             }
             for (double x = this.MarginLeft; x <= this.ChartWidth + this.MarginLeft; x += this.xLabelSpace)
             {
-                MyLine line = new MyLine(x, this.MarginTop, x, this.MarginTop + this.ChartHeight, Colors.Purple, 0.3);
+                var line = new MyLine(x, this.MarginTop, x, this.MarginTop + this.ChartHeight, Colors.Purple, 0.3);
                 myLines.Add(line);
             }
-
         }
 
         /// <summary>
@@ -231,6 +244,7 @@ namespace PZ3_NetworkService.ViewModel
             var logDict = this.GetLogDict(id);
             return this.ParseToTuple(logDict.ContainsKey(id) ? logDict[id] : new List<string>(), n);
         }
+
         public Dictionary<int, List<string>> GetLogDict(int reactorId)
         {
             return Log.ParseLogFile(ascending: false, callback: (currLine) =>
@@ -243,16 +257,17 @@ namespace PZ3_NetworkService.ViewModel
                   return false;
               });
         }
+
         public Tuple<List<DateTime>, List<double>> ParseToTuple(List<string> strList, int n)
         {
-            List<double> tempList = new List<double>();
-            List<DateTime> timeList = new List<DateTime>();
+            var tempList = new List<double>();
+            var timeList = new List<DateTime>();
             for (int i = 0; i < n && i < strList.Count; ++i)
             {
                 var match = Regex.Match(strList[i], @"^([0-9/]+ [0-9:]+).*?([0-9.]+)$");
                 string sdate = match.Groups[1].Value;
                 string stemp = match.Groups[2].Value;
-                DateTime date = DateTime.Parse(sdate, CultureInfo.InvariantCulture);
+                var date = DateTime.Parse(sdate, CultureInfo.InvariantCulture);
                 if (double.TryParse(stemp, out double temp))
                 {
                     tempList.Add(temp);
@@ -261,28 +276,33 @@ namespace PZ3_NetworkService.ViewModel
             }
             return new Tuple<List<DateTime>, List<double>>(timeList, tempList);
         }
+
         public DateTime ScalePointToTime(double x, DateTime minTime, DateTime maxTime)
         {
             double dTimeStart = ConvertToUnixTimestamp(minTime);
             double dTimeEnd = ConvertToUnixTimestamp(maxTime);
             double dTime = ConvertRange(0, this.ChartWidth, dTimeStart, dTimeEnd, x - this.MarginLeft);
-            TimeSpan ts = TimeSpan.FromSeconds(dTime);
-            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            var ts = TimeSpan.FromSeconds(dTime);
+            var origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             return origin + ts;
         }
+
         public double ScalePointToTemp(double y, double minTemp, double maxTemp)
         {
             double tempY = y - this.MarginTop;
             return ConvertRange(0, this.ChartHeight, maxTemp, minTemp, tempY);
         }
+
         public double ScaleTemp(double minTemp, double maxTemp, double temperature)
         {
             return this.ChartHeight - ConvertRange(minTemp, maxTemp, 0, this.ChartHeight, temperature) + this.MarginTop;
         }
+
         public double ScaleTime(DateTime minTime, DateTime maxTime, DateTime time)
         {
             return ConvertRange(minTime, maxTime, 0, this.ChartWidth, time) + this.MarginLeft;
         }
+
         public List<MyPoint> ConvertToPoints(List<DateTime> timeList, List<double> tempsList)
         {
             var retVal = new List<MyPoint>();
@@ -294,7 +314,7 @@ namespace PZ3_NetworkService.ViewModel
             int n = Math.Min(timeList.Count, tempsList.Count);
             for (int i = 0; i < n; ++i)
             {
-                MyPoint pt = new MyPoint
+                var pt = new MyPoint
                 {
                     X = this.ScaleTime(this.minTime, this.maxTime, timeList[i]),
                     //X = ConvertRange(n, 0, 0, this.ChartWidth, i) + this.MarginLeft,
@@ -307,6 +327,7 @@ namespace PZ3_NetworkService.ViewModel
 
             return retVal;
         }
+
         public List<MyLine> ConnectPoints(List<MyPoint> points)
         {
             var retVal = new List<MyLine>();
@@ -319,13 +340,13 @@ namespace PZ3_NetworkService.ViewModel
             double minSafeY = this.ScaleTemp(this.minTemp, this.maxTemp, Model.ReactorModel.MAX_SAFE_TEMP_CELS);
             for (int i = 0; i < n; ++i)
             {
-                Color col = Colors.Green;
+                var col = Colors.Green;
                 double maxSafeX = this.LineEquationGetX(points[i], points[i + 1], maxSafeY);
                 double minSafeX = this.LineEquationGetX(points[i], points[i + 1], minSafeY);
-                MyPoint minSafePoint = new MyPoint(minSafeX, minSafeY);
-                MyPoint maxSafePoint = new MyPoint(maxSafeX, maxSafeY);
-                MyPoint leftPoint = points[i];
-                MyPoint rightPoint = points[i + 1];
+                var minSafePoint = new MyPoint(minSafeX, minSafeY);
+                var maxSafePoint = new MyPoint(maxSafeX, maxSafeY);
+                var leftPoint = points[i];
+                var rightPoint = points[i + 1];
 
                 if ((leftPoint.Y > maxSafeY && rightPoint.Y > maxSafeY)
                     || (leftPoint.Y < minSafeY && rightPoint.Y < minSafeY))
@@ -361,26 +382,29 @@ namespace PZ3_NetworkService.ViewModel
                     }
                 }
 
-                MyLine line = new MyLine(leftPoint, rightPoint, col);
+                var line = new MyLine(leftPoint, rightPoint, col);
                 Debug.WriteLine(line);
                 retVal.Add(line);
             }
             return retVal;
         }
+
         public double LineEquationGetX(MyPoint p1, MyPoint p2, double y)
         {
             double k = (p2.Y - p1.Y) / (p2.X - p1.X);
             double n = p1.Y - k * p1.X;
             return (y - n) / k;
         }
+
         public static double ConvertToUnixTimestamp(DateTime date)
         {
-            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            TimeSpan diff = date - origin;
+            var origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            var diff = date - origin;
             return diff.TotalSeconds;
         }
 
         #region ConvertRange
+
         public static int ConvertRange(
             int originalStart, int originalEnd, // original range
             int newStart, int newEnd, // desired range
@@ -389,6 +413,7 @@ namespace PZ3_NetworkService.ViewModel
             double scale = (double)(newEnd - newStart) / (originalEnd - originalStart);
             return (int)(newStart + ((value - originalStart) * scale));
         }
+
         public static double ConvertRange(
             DateTime originalStart, DateTime originalEnd,
             double newStart, double newEnd,
@@ -399,6 +424,7 @@ namespace PZ3_NetworkService.ViewModel
             double dTimeEnd = ConvertToUnixTimestamp(originalEnd);
             return ConvertRange(dTimeStart, dTimeEnd, newStart, newEnd, dTime);
         }
+
         public static double ConvertRange(
             double originalStart, double originalEnd,
             double newStart, double newEnd,
@@ -407,7 +433,7 @@ namespace PZ3_NetworkService.ViewModel
             double scale = (newEnd - newStart) / (originalEnd - originalStart);
             return newStart + ((value - originalStart) * scale);
         }
-        #endregion
-    }
 
+        #endregion ConvertRange
+    }
 }

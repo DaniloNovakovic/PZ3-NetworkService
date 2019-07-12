@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media;
+﻿using System.ComponentModel;
 
 namespace PZ3_NetworkService.ViewModel
 {
@@ -16,6 +9,7 @@ namespace PZ3_NetworkService.ViewModel
         public MyICommand UntrackCommand { get; private set; }
         public BindingList<Model.ReactorModel> Collection { get; set; } = new BindingList<Model.ReactorModel>();
         private Model.ReactorModel selectedReactor;
+
         public Model.ReactorModel SelectedReactor
         {
             get => this.selectedReactor;
@@ -28,22 +22,27 @@ namespace PZ3_NetworkService.ViewModel
                 this.OnPropertyChanged("Title");
             }
         }
+
         public bool ButtonEnabled
         {
             get => this.Collection.Count > 0;
         }
+
         public string GridVisibility
         {
             get => this.Collection.Count > 0 ? "Hidden" : "Visible";
         }
+
         public string Title
         {
             get => this.SelectedReactor?.ToString() ?? string.Empty;
         }
+
         public double? Temperature
         {
             get => this.SelectedReactor?.Temperature;
         }
+
         public string BorderBrush
         {
             get
@@ -58,6 +57,7 @@ namespace PZ3_NetworkService.ViewModel
                 }
             }
         }
+
         public ReactorCellViewModel()
         {
             this.UntrackCommand = new MyICommand(this.OnUntrack);
@@ -75,7 +75,6 @@ namespace PZ3_NetworkService.ViewModel
             this.OnPropertyChanged("GridVisibility");
             this.OnPropertyChanged("ButtonEnabled");
         }
-
 
         private void SelectedReactor_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {

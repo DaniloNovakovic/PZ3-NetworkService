@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace PZ3_NetworkService.ViewModel
 {
-
     public class NetworkDataViewModel : BindableBase
     {
         public BindingList<Model.ReactorModel> ReactorList { get; private set; } = new BindingList<Model.ReactorModel>();
@@ -28,6 +24,7 @@ namespace PZ3_NetworkService.ViewModel
         private int filterId = 0;
 
         public bool[] FilterModeArray { get; } = new bool[] { false, true }; // {lt, gt}
+
         public int FilterSelectedMode
         {
             get { return Array.IndexOf(this.FilterModeArray, true); }
@@ -46,6 +43,7 @@ namespace PZ3_NetworkService.ViewModel
                 }
             }
         }
+
         public string FilterTypeName
         {
             get => this.filterTypeName;
@@ -58,6 +56,7 @@ namespace PZ3_NetworkService.ViewModel
                 }
             }
         }
+
         public int FilterId
         {
             get => this.filterId;
@@ -72,6 +71,7 @@ namespace PZ3_NetworkService.ViewModel
         }
 
         public Model.ReactorModel SelectedReactor { get; set; }
+
         public Model.ReactorModel CurrentReactor
         {
             get => this.currentReactor;
@@ -92,6 +92,7 @@ namespace PZ3_NetworkService.ViewModel
             this.reactorTypeNames = new CollectionView(Database.ReactorTypes.Values.ToList());
             this.filterTypeNames = new CollectionView(Database.ReactorTypes.Values.ToList());
         }
+
         private void OnAdd()
         {
             this.CurrentReactor.Validate();
@@ -102,19 +103,21 @@ namespace PZ3_NetworkService.ViewModel
                 // + Restart Metering Simulator?
             }
         }
+
         private void OnDelete()
         {
-            int id = SelectedReactor.Id;
+            int id = this.SelectedReactor.Id;
             if (Database.Remove(id))
             {
-                RefreshList();
+                this.RefreshList();
                 // + Restart Metering Simulator?
             }
         }
+
         private void OnFilter()
         {
             this.ReactorList.Clear();
-            foreach (KeyValuePair<int, Model.ReactorModel> pair in Database.Reactors)
+            foreach (var pair in Database.Reactors)
             {
                 int id = pair.Key;
                 string typeName = pair.Value.Type.Name;
@@ -130,6 +133,7 @@ namespace PZ3_NetworkService.ViewModel
                             this.ReactorList.Add(Database.Reactors[id]);
                         }
                         break;
+
                     case 1:
                         if (id > this.FilterId)
                         {
@@ -139,14 +143,14 @@ namespace PZ3_NetworkService.ViewModel
                 }
             }
         }
+
         private void RefreshList()
         {
             this.ReactorList.Clear();
-            foreach (Model.ReactorModel reactor in Database.Reactors.Values)
+            foreach (var reactor in Database.Reactors.Values)
             {
                 this.ReactorList.Add(reactor);
             }
         }
-
     }
 }

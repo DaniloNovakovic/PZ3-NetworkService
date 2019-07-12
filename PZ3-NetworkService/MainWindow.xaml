@@ -18,28 +18,28 @@
         Closing="Window_Closing">
 
     <Window.DataContext>
-        <local:MainWindowViewModel/>
+        <local:MainWindowViewModel />
     </Window.DataContext>
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModel:DataChartViewModel}">
-            <views:DataChartView/>
+            <views:DataChartView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:NetworkDataViewModel}">
-            <views:NetworkDataView/>
+            <views:NetworkDataView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:NetworkViewModel}">
-            <views:NetworkView/>
+            <views:NetworkView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:ReportViewModel}">
-            <views:ReportView/>
+            <views:ReportView />
         </DataTemplate>
     </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0" Margin="5">
@@ -70,6 +70,6 @@
                 </MenuItem>
             </Menu>
         </DockPanel>
-        <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" Grid.ColumnSpan="2" Margin="20,10,20,10"/>
+        <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}" Grid.ColumnSpan="2" Margin="20,10,20,10" />
     </Grid>
 </Window>

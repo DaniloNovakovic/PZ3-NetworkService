@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace PZ3_NetworkService
 {
     public abstract class ValidationBase : BindableBase
     {
         public ValidationErrors ValidationErrors { get; set; }
+
         [XmlIgnoreAttribute]
         public bool IsValid { get; private set; }
 

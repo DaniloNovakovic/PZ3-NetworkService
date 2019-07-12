@@ -9,13 +9,13 @@
     <Grid Background="Black">
         <DockPanel>
             <StackPanel DockPanel.Dock="Top" Orientation="Vertical">
-                <TextBlock Text="Metering Simulator" Foreground="White" FontSize="18" FontFamily="Consolas"/>
+                <TextBlock Text="Metering Simulator" Foreground="White" FontSize="18" FontFamily="Consolas" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Background="Black">
-                    <Button Name="RestartButton" Content="Restart" Foreground="White" Width="100" Background="Black" BorderBrush="White" Click="RestartButton_Click"/>
-                    <Button Name="CloseButton" Content="Exit" Foreground="White" Width="100" BorderBrush="White" Background="Black" Click="CloseButton_Click"/>
+                    <Button Name="RestartButton" Content="Restart" Foreground="White" Width="100" Background="Black" BorderBrush="White" Click="RestartButton_Click" />
+                    <Button Name="CloseButton" Content="Exit" Foreground="White" Width="100" BorderBrush="White" Background="Black" Click="CloseButton_Click" />
                 </StackPanel>
             </StackPanel>
-            <TextBox DockPanel.Dock="Top" x:Name="textBox" TextWrapping="Wrap" Text="" IsReadOnly="True" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="White" Foreground="White"/>
+            <TextBox DockPanel.Dock="Top" x:Name="textBox" TextWrapping="Wrap" Text="" IsReadOnly="True" Background="{x:Null}" BorderBrush="{x:Null}" CaretBrush="White" Foreground="White" />
         </DockPanel>
     </Grid>
 </Window>

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PZ3_NetworkService.Model
 {
@@ -13,6 +9,7 @@ namespace PZ3_NetworkService.Model
         private string name;
         private ReactorTypeModel type = new ReactorTypeModel();
         private int id;
+
         public int Id
         {
             get => this.id;
@@ -25,6 +22,7 @@ namespace PZ3_NetworkService.Model
                 }
             }
         }
+
         public string Name
         {
             get => this.name;
@@ -37,6 +35,7 @@ namespace PZ3_NetworkService.Model
                 }
             }
         }
+
         public ReactorTypeModel Type
         {
             get => this.type;
@@ -49,6 +48,7 @@ namespace PZ3_NetworkService.Model
                 }
             }
         }
+
         public double Temperature
         {
             get => this.temp;
@@ -62,6 +62,7 @@ namespace PZ3_NetworkService.Model
                 }
             }
         }
+
         public const int MIN_SAFE_TEMP_CELS = 250;
         public const int MAX_SAFE_TEMP_CELS = 350;
 
@@ -71,6 +72,7 @@ namespace PZ3_NetworkService.Model
             this.Type = new ReactorTypeModel();
             this.Temperature = ReactorModel.MIN_SAFE_TEMP_CELS;
         }
+
         public ReactorModel(int id, string name, ReactorTypeModel type, double temperature)
         {
             this.Id = id;
@@ -78,11 +80,14 @@ namespace PZ3_NetworkService.Model
             this.Type = type ?? new ReactorTypeModel();
             this.Temperature = temperature;
         }
+
         public static ReactorModel Copy(ReactorModel reactor)
         {
             return new ReactorModel(reactor.id, reactor.name, reactor.type, reactor.temp);
         }
+
         #region overrides
+
         public override bool Equals(object obj)
         {
             if (obj is ReactorModel reactor)
@@ -109,11 +114,14 @@ namespace PZ3_NetworkService.Model
                 this.ValidationErrors["Name"] = "Name field is required.";
             }
         }
-        #endregion
+
+        #endregion overrides
+
         public string ToFullString()
         {
             return $"Id:{this.Id}, Name:{this.Name}, Temperature:{this.Temperature}, Type:{this.Type}";
         }
+
         public void ValidateTemperature()
         {
             if (!this.IsTemperatureSafe())
@@ -122,10 +130,12 @@ namespace PZ3_NetworkService.Model
             }
             this.OnPropertyChanged("ValidationErrors");
         }
+
         public bool IsTemperatureSafe()
         {
             return this.Temperature >= MIN_SAFE_TEMP_CELS && this.Temperature <= MAX_SAFE_TEMP_CELS;
         }
+
         public void ValidateUniqueId()
         {
             if (Database.Reactors.ContainsKey(this.Id))
@@ -135,5 +145,4 @@ namespace PZ3_NetworkService.Model
             this.OnPropertyChanged("ValidationErrors");
         }
     }
-
 }

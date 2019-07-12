@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -18,6 +16,7 @@ namespace PZ3_NetworkService.ViewModel
         private DateTime startDate;
         private DateTime endDate;
         private string textReport = string.Empty;
+
         public DateTime StartDate
         {
             get => this.startDate;
@@ -30,6 +29,7 @@ namespace PZ3_NetworkService.ViewModel
                 }
             }
         }
+
         public DateTime EndDate
         {
             get => this.endDate;
@@ -42,6 +42,7 @@ namespace PZ3_NetworkService.ViewModel
                 }
             }
         }
+
         public string TextReport
         {
             get => this.textReport;
@@ -54,7 +55,9 @@ namespace PZ3_NetworkService.ViewModel
                 }
             }
         }
+
         private FlowDocument flowDoc = new FlowDocument();
+
         public FlowDocument FlowDoc
         {
             get => this.flowDoc;
@@ -71,22 +74,24 @@ namespace PZ3_NetworkService.ViewModel
             this.endDate = DateTime.Today;
             this.ShowCommand = new MyICommand(this.OnShow);
         }
+
         public void OnShow()
         {
-            Dictionary<int, List<string>> logDict = Log.ParseLogFile(callback: (string currLine) =>
+            var logDict = Log.ParseLogFile(callback: (string currLine) =>
             {
                 var match = Regex.Match(currLine, @"(\d+/\d+/\d+)");
                 string sdate = match.Value;
-                DateTime date = DateTime.ParseExact(sdate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                var date = DateTime.ParseExact(sdate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
                 return DateTime.Compare(date, this.startDate) >= 0 && DateTime.Compare(date, this.endDate) <= 0;
             });
             //this.TextReport = this.ConvertLogDictToStr(logDict);
             this.FlowDoc = this.ConvertLogToFlowDocument(logDict);
         }
+
         private FlowDocument ConvertLogToFlowDocument(Dictionary<int, List<string>> logDict)
         {
-            FlowDocument doc = new FlowDocument();
-            Paragraph paragraph = new Paragraph(new Run("REPORT:"))
+            var doc = new FlowDocument();
+            var paragraph = new Paragraph(new Run("REPORT:"))
             {
                 Foreground = new SolidColorBrush(Colors.Purple),
                 FontWeight = FontWeights.Bold,
@@ -94,7 +99,7 @@ namespace PZ3_NetworkService.ViewModel
             };
             doc.Blocks.Add(paragraph);
 
-            List<int> ids = logDict.Keys.Where(x => Database.Reactors.ContainsKey(x)).ToList();
+            var ids = logDict.Keys.Where(x => Database.Reactors.ContainsKey(x)).ToList();
             ids.Sort();
             foreach (int id in ids)
             {
@@ -107,11 +112,11 @@ namespace PZ3_NetworkService.ViewModel
                 doc.Blocks.Add(paragraph);
                 foreach (string el in logDict[id])
                 {
-                    Color col = Colors.Green;
+                    var col = Colors.Green;
                     var match = Regex.Match(el, @".*?([0-9.]+)$");
-                    if(double.TryParse(match.Groups[1].Value, out double val))
+                    if (double.TryParse(match.Groups[1].Value, out double val))
                     {
-                        if(val < Model.ReactorModel.MIN_SAFE_TEMP_CELS || val > Model.ReactorModel.MAX_SAFE_TEMP_CELS)
+                        if (val < Model.ReactorModel.MIN_SAFE_TEMP_CELS || val > Model.ReactorModel.MAX_SAFE_TEMP_CELS)
                         {
                             col = Colors.Red;
                         }
@@ -128,11 +133,12 @@ namespace PZ3_NetworkService.ViewModel
             }
             return doc;
         }
+
         private string ConvertLogDictToStr(Dictionary<int, List<string>> logDict)
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.AppendLine("REPORT:");
-            List<int> ids = logDict.Keys.Where(x => Database.Reactors.ContainsKey(x)).ToList();
+            var ids = logDict.Keys.Where(x => Database.Reactors.ContainsKey(x)).ToList();
             ids.Sort();
             foreach (int id in ids)
             {

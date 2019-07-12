@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MeteringSimulator
 {
@@ -24,19 +13,19 @@ namespace MeteringSimulator
         private static double value = -1;
         private static int objectNum = 0;
         private int numObjects = -1;
-        private Random r = new Random();
+        private readonly Random r = new Random();
 
         public MainWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //Proveri broj objekata pod monitoringom
-            askForCount();
+            this.askForCount();
             //Pocni prijavljivanje novih vrednosti za objekte
-            startReporting();
+            this.startReporting();
         }
 
         private void askForCount()
@@ -45,21 +34,21 @@ namespace MeteringSimulator
             {
                 //Pita koliko aplikacija ima objekata
                 //Request
-                Int32 port = 25565;
-                TcpClient client = new TcpClient("localhost", port);
-                Byte[] data = System.Text.Encoding.ASCII.GetBytes("Need object count");
-                NetworkStream stream = client.GetStream();
+                int port = 25565;
+                var client = new TcpClient("localhost", port);
+                byte[] data = System.Text.Encoding.ASCII.GetBytes("Need object count");
+                var stream = client.GetStream();
                 stream.Write(data, 0, data.Length);
 
                 //Obrada odgovora
                 //Response
-                Byte[] responseData = new Byte[1024];
+                byte[] responseData = new byte[1024];
                 string response = "";
-                Int32 bytess = stream.Read(responseData, 0, responseData.Length);
+                int bytess = stream.Read(responseData, 0, responseData.Length);
                 response = System.Text.Encoding.ASCII.GetString(responseData, 0, bytess);
 
                 //Parsiranje odgovora u int vrednost
-                numObjects = Int32.Parse(response);
+                this.numObjects = int.Parse(response);
 
                 //Zatvaranje konekcije
                 stream.Close();
@@ -74,17 +63,17 @@ namespace MeteringSimulator
         private void startReporting()
         {
             //Na radnom vreme posalji izmenu vrednosti nekog random objekta i nastavi da to radis u rekurziji
-            int waitTime = r.Next(1000, 5000);
+            int waitTime = this.r.Next(1000, 5000);
             Task.Delay(waitTime).ContinueWith(_ =>
             {
                 this.Dispatcher.Invoke(() =>
                 {
                     //Slanje izmene stanja nekog objekta
-                    sendReport();
+                    this.sendReport();
                     //Upis u text box, radi lakse provere
-                    textBox.Text = "Object_" + objectNum + " changed state to: " + value.ToString() + "\n" + textBox.Text;
+                    this.textBox.Text = "Object_" + objectNum + " changed state to: " + value.ToString() + "\n" + this.textBox.Text;
                     //Pocni proces ispocetka
-                    startReporting();
+                    this.startReporting();
                 });
             });
         }
@@ -95,13 +84,13 @@ namespace MeteringSimulator
             {
                 //Slanje nove vrednosti objekta
                 //Request
-                Int32 port = 25565;
-                TcpClient client = new TcpClient("localhost", port);
-                int rInt = r.Next(0, numObjects); //Brojimo od nule, maxValue nije ukljucen u range
+                int port = 25565;
+                var client = new TcpClient("localhost", port);
+                int rInt = this.r.Next(0, this.numObjects); //Brojimo od nule, maxValue nije ukljucen u range
                 objectNum = rInt;
-                value = r.Next(150, 450); //Uzete su nasumicne i realne vrednosti
-                Byte[] data = System.Text.Encoding.ASCII.GetBytes("Objekat_" + rInt + ":" + value);
-                NetworkStream stream = client.GetStream();
+                value = this.r.Next(150, 450); //Uzete su nasumicne i realne vrednosti
+                byte[] data = System.Text.Encoding.ASCII.GetBytes("Objekat_" + rInt + ":" + value);
+                var stream = client.GetStream();
                 stream.Write(data, 0, data.Length);
 
                 //Zatvaranje konekcije

@@ -1,22 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PZ3_NetworkService
 {
@@ -47,7 +34,7 @@ namespace PZ3_NetworkService
                     ThreadPool.QueueUserWorkItem(param =>
                     {
                         //Prijem poruke
-                        NetworkStream stream = tcpClient.GetStream();
+                        var stream = tcpClient.GetStream();
                         string incomming;
                         byte[] bytes = new byte[1024];
                         int i = stream.Read(bytes, 0, bytes.Length);
@@ -58,12 +45,12 @@ namespace PZ3_NetworkService
                         if (incomming.Equals("Need object count"))
                         {
                             //Response
-                            /* Umesto sto se ovde salje count.ToString(), potrebno je poslati 
+                            /* Umesto sto se ovde salje count.ToString(), potrebno je poslati
                              * duzinu liste koja sadrzi sve objekte pod monitoringom, odnosno
                              * njihov ukupan broj (NE BROJATI OD NULE, VEC POSLATI UKUPAN BROJ)
                              * */
                             this.count = Database.ReactorIds.Count;
-                            Byte[] data = System.Text.Encoding.ASCII.GetBytes(this.count.ToString());
+                            byte[] data = System.Text.Encoding.ASCII.GetBytes(this.count.ToString());
                             stream.Write(data, 0, data.Length);
                         }
                         else
@@ -79,7 +66,7 @@ namespace PZ3_NetworkService
                             {
                                 if (objectIndex < 0 || objectIndex >= Database.ReactorIds.Count)
                                 {
-                                    Debug.Fail($"Value \"{incomming}\" from server is out of bounds!");
+                                    Trace.TraceError($"Value \"{incomming}\" from server is out of bounds!");
                                 }
                                 else if (double.TryParse(match.Groups[2].Value, out double newVal))
                                 {
@@ -90,12 +77,12 @@ namespace PZ3_NetworkService
                                 }
                                 else
                                 {
-                                    Debug.Fail($"Could not parse \"{match.Groups[2].Value}\" to integer.");
+                                    Trace.TraceError($"Could not parse \"{match.Groups[2].Value}\" to integer.");
                                 }
                             }
                             else
                             {
-                                Debug.Fail($"Could not parse \"{match.Groups[1].Value}\" to integer.");
+                                Trace.TraceError($"Could not parse \"{match.Groups[1].Value}\" to integer.");
                             }
                         }
                     }, null);
@@ -109,7 +96,7 @@ namespace PZ3_NetworkService
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            IClosing context = this.DataContext as IClosing;
+            var context = this.DataContext as IClosing;
             if (context != null)
             {
                 e.Cancel = !context.OnClosing();

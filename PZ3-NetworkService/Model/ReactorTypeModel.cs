@@ -7,6 +7,7 @@ namespace PZ3_NetworkService.Model
     {
         public string Name { get; set; }
         public string ImgSrc { get; set; }
+
         public ReactorTypeModel()
         {
             this.Name = string.Empty;
@@ -20,6 +21,7 @@ namespace PZ3_NetworkService.Model
         }
 
         #region overrides
+
         public override bool Equals(object obj)
         {
             return this.ToString().Equals(obj?.ToString() ?? string.Empty);
@@ -34,6 +36,7 @@ namespace PZ3_NetworkService.Model
         {
             return $"{this.Name} {this.ImgSrc}";
         }
-        #endregion
+
+        #endregion overrides
     }
 }

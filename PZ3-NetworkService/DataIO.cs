@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
@@ -18,9 +14,9 @@ namespace PZ3_NetworkService
 
             try
             {
-                XmlDocument xmlDocument = new XmlDocument();
-                XmlSerializer serializer = new XmlSerializer(serializableObject.GetType());
-                using (MemoryStream stream = new MemoryStream())
+                var xmlDocument = new XmlDocument();
+                var serializer = new XmlSerializer(serializableObject.GetType());
+                using (var stream = new MemoryStream())
                 {
                     serializer.Serialize(stream, serializableObject);
                     stream.Position = 0;
@@ -41,19 +37,19 @@ namespace PZ3_NetworkService
         {
             //if (string.IsNullOrEmpty(fileName)) { return default(T); }
 
-            T objectOut = default(T);
+            var objectOut = default(T);
 
             string attributeXml = string.Empty;
 
-            XmlDocument xmlDocument = new XmlDocument();
+            var xmlDocument = new XmlDocument();
             xmlDocument.Load(fileName);
             string xmlString = xmlDocument.OuterXml;
 
-            using (StringReader read = new StringReader(xmlString))
+            using (var read = new StringReader(xmlString))
             {
-                Type outType = typeof(T);
+                var outType = typeof(T);
 
-                XmlSerializer serializer = new XmlSerializer(outType);
+                var serializer = new XmlSerializer(outType);
                 using (XmlReader reader = new XmlTextReader(read))
                 {
                     objectOut = (T)serializer.Deserialize(reader);

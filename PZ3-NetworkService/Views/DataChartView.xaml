@@ -1,46 +1,46 @@
 ﻿<UserControl x:Class="PZ3_NetworkService.Views.DataChartView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PZ3_NetworkService.Views"
              xmlns:viewModel="clr-namespace:PZ3_NetworkService.ViewModel"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
-        <viewModel:DataChartViewModel/>
+        <viewModel:DataChartViewModel />
     </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <!-- Buttons and User input -->
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
-                <Label Content="Reactor:" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+                <Label Content="Reactor:" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" />
                 <ComboBox Grid.Column="1"
                     ItemsSource="{Binding Path=Reactors}"
-                    SelectedValue="{Binding Path=SelectedReactor}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    SelectedValue="{Binding Path=SelectedReactor}" VerticalAlignment="Center" Margin="10,0,0,0" />
             </Grid>
             <Grid Grid.Column="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
-                <Label Content="Number of last changes:" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"/>
-                <TextBox Text="{Binding Limit, Mode=TwoWay}" Grid.Column="2" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <Label Content="Number of last changes:" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0" />
+                <TextBox Text="{Binding Limit, Mode=TwoWay}" Grid.Column="2" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
             </Grid>
             <Button Grid.Column="2" HorizontalAlignment="Center" Margin="10" ToolTip="Show Chart" Command="{Binding ShowChartCommand}">
                 <materialDesign:PackIcon Kind="ShowChart" Height="24" Width="24" />
@@ -49,17 +49,17 @@
 
         <!-- Chart bindings -->
         <!-- Labels -->
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding Path=Labels}" >
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Path=Labels}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas Background="Transparent" Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                    <Canvas Background="Transparent" Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type viewModel:MyLabel}">
-                    <Label Content="{Binding Content}" >
+                    <Label Content="{Binding Content}">
                         <Label.LayoutTransform>
-                            <RotateTransform Angle="{Binding Angle}"/>
+                            <RotateTransform Angle="{Binding Angle}" />
                         </Label.LayoutTransform>
                     </Label>
                 </DataTemplate>
@@ -76,26 +76,26 @@
         <ItemsControl Grid.Row="1" ItemsSource="{Binding Path=Lines}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas Background="Transparent" Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                    <Canvas Background="Transparent" Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type viewModel:MyLine}">
-                    <Line Stroke="{Binding Brush}" Opacity="{Binding Opacity}" StrokeThickness="2" X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}"/>
+                    <Line Stroke="{Binding Brush}" Opacity="{Binding Opacity}" StrokeThickness="2" X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        
+
         <!-- Points with tooltip -->
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding Path=Points}" >
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Path=Points}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas Background="Transparent" Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}"/>
+                    <Canvas Background="Transparent" Width="{Binding CanvasWidth}" Height="{Binding CanvasHeight}" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type viewModel:MyLabel}">
-                    <Ellipse Fill="Purple" ToolTip="{Binding ToolTip}" Height="{Binding R}" Width="{Binding R}"/>
+                    <Ellipse Fill="Purple" ToolTip="{Binding ToolTip}" Height="{Binding R}" Width="{Binding R}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemContainerStyle>

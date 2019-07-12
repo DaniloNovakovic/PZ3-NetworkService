@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PZ3_NetworkService
 {
     public static class Database
     {
-        private static DataIO serializer = new DataIO();
+        private static readonly DataIO serializer = new DataIO();
         public static SortedDictionary<int, Model.ReactorModel> Reactors { get; private set; }
         public static List<int> ReactorIds { get; private set; }
         public static SortedDictionary<string, Model.ReactorTypeModel> ReactorTypes { get; private set; }
@@ -41,6 +38,7 @@ namespace PZ3_NetworkService
                 return false;
             }
         }
+
         public static bool Remove(int id)
         {
             try
@@ -59,6 +57,7 @@ namespace PZ3_NetworkService
         }
 
         #region serialization
+
         /// <summary>
         /// Attempts to serialize database to fileName
         /// </summary>
@@ -73,16 +72,17 @@ namespace PZ3_NetworkService
                 return false;
             }
         }
+
         /// <summary>
-        /// Attempts to DeSerialize database from fileName. 
+        /// Attempts to DeSerialize database from fileName.
         /// </summary>
         public static SortedDictionary<int, Model.ReactorModel> Load(string fileName = "database.xml")
         {
             try
             {
-                List<Model.ReactorModel> reactors = serializer.DeSerializeObject<List<Model.ReactorModel>>(fileName);
+                var reactors = serializer.DeSerializeObject<List<Model.ReactorModel>>(fileName);
                 var retVal = new SortedDictionary<int, Model.ReactorModel>();
-                foreach(var reactor in reactors)
+                foreach (var reactor in reactors)
                 {
                     retVal[reactor.Id] = reactor;
                 }
@@ -93,6 +93,7 @@ namespace PZ3_NetworkService
                 return null;
             }
         }
-        #endregion
+
+        #endregion serialization
     }
 }

@@ -1,44 +1,43 @@
 ﻿<UserControl x:Class="PZ3_NetworkService.Views.ReactorCellView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PZ3_NetworkService.Views"
              xmlns:viewModel="clr-namespace:PZ3_NetworkService.ViewModel"
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="150" d:DesignWidth="150">
-    
+
     <UserControl.DataContext>
-        <viewModel:ReactorCellViewModel/>
+        <viewModel:ReactorCellViewModel />
     </UserControl.DataContext>
     <UserControl.Resources>
-        <Image x:Key="TrashIcon" Source="/Images/trash.png"/>
+        <Image x:Key="TrashIcon" Source="/Images/trash.png" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Title}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Title}" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
         <!-- Currently a "cheating hack" :P -->
         <DataGrid ItemsSource="{Binding Collection}"
                 SelectedItem="{Binding SelectedReactor}"
-                dd:DragDrop.IsDropTarget="True" 
+                dd:DragDrop.IsDropTarget="True"
                 BorderBrush="{Binding BorderBrush}"
                 AutoGenerateColumns="False"
                 ColumnHeaderHeight="0"
-                Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  
+                Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                 Opacity="0"
-                Visibility="{Binding GridVisibility}"
-        />
+                Visibility="{Binding GridVisibility}" />
         <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="3" BorderBrush="{Binding BorderBrush}">
             <Image Source="{Binding SelectedReactor.Type.ImgSrc}" />
         </Border>
@@ -54,6 +53,6 @@
                 Height="17"
                 Width="17" />
         </Button>
-        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Temperature}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Temperature}" VerticalAlignment="Center" HorizontalAlignment="Center" />
     </Grid>
 </UserControl>

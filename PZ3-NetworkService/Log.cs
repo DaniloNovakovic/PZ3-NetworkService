@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace PZ3_NetworkService
 {
@@ -16,7 +13,7 @@ namespace PZ3_NetworkService
         {
             if (outObj is null || fileName is null)
             {
-                Debug.Fail("Log.Append: Both input parameters must not be null!");
+                Trace.TraceError("Log.Append: Both input parameters must not be null!");
                 return false;
             }
             try
@@ -26,14 +23,16 @@ namespace PZ3_NetworkService
             }
             catch (Exception err)
             {
-                Debug.Fail(err.Message);
+                Trace.TraceError(err.Message);
                 return false;
             }
         }
+
         public static string ConvertToLogFormat(Model.ReactorModel reactor)
         {
             return ConvertToLogFormat(reactor.Id, reactor.Temperature);
         }
+
         public static string ConvertToLogFormat(int id, double temperature)
         {
             var currDate = DateTime.Now;
@@ -41,20 +40,23 @@ namespace PZ3_NetworkService
         }
 
         /// <summary>
-        /// Parses given file into a dictionary where keys are reactor id, and values are list of lines that met callback condition
+        /// Parses given file into a dictionary where keys are reactor id, and values are list of
+        /// lines that met callback condition
         /// </summary>
         /// <param name="fileName">Name of file to parse</param>
-        /// <param name="callback">Receives current line and outputs true if it should be contained in returned dictionary</param>
+        /// <param name="callback">
+        /// Receives current line and outputs true if it should be contained in returned dictionary
+        /// </param>
         /// <returns></returns>
         public static Dictionary<int, List<string>> ParseLogFile(string fileName = "log.txt", bool ascending = true, Func<string, bool> callback = null)
         {
-            Dictionary<int, List<string>> retVal = new Dictionary<int, List<string>>();
+            var retVal = new Dictionary<int, List<string>>();
             try
             {
                 string filePath = Environment.CurrentDirectory + @"\" + fileName;
                 if (File.Exists(filePath))
                 {
-                    using (StreamReader sr = new StreamReader(filePath))
+                    using (var sr = new StreamReader(filePath))
                     {
                         while (!sr.EndOfStream)
                         {
@@ -78,7 +80,7 @@ namespace PZ3_NetworkService
                             }
                             else
                             {
-                                Debug.Fail($"Failed to parse id={sid}");
+                                Trace.TraceError($"Failed to parse id={sid}");
                             }
                         }
                         SortDictValues(ref retVal, ascending);
@@ -86,15 +88,16 @@ namespace PZ3_NetworkService
                 }
                 else
                 {
-                    Debug.Fail($"File \"{filePath}\" does not exist.");
+                    Trace.TraceError($"File \"{filePath}\" does not exist.");
                 }
             }
             catch (Exception ex)
             {
-                Debug.Fail(ex.Message);
+                Trace.TraceError(ex.Message);
             }
             return retVal;
         }
+
         public static void SortDictValues(ref Dictionary<int, List<string>> logDict, bool ascending = true)
         {
             foreach (int key in logDict.Keys)
@@ -107,8 +110,8 @@ namespace PZ3_NetworkService
                         //const string dateTimePattern = @"dd/MM/yyyy HH:mm:ss";
                         string leftMatch = Regex.Match(lhs, regexPattern).Value;
                         string rightMatch = Regex.Match(rhs, regexPattern).Value;
-                        DateTime leftDate = DateTime.Parse(leftMatch, CultureInfo.InvariantCulture);
-                        DateTime rightDate = DateTime.Parse(rightMatch, CultureInfo.InvariantCulture);
+                        var leftDate = DateTime.Parse(leftMatch, CultureInfo.InvariantCulture);
+                        var rightDate = DateTime.Parse(rightMatch, CultureInfo.InvariantCulture);
                         if (ascending)
                         {
                             return DateTime.Compare(leftDate, rightDate);
@@ -120,7 +123,7 @@ namespace PZ3_NetworkService
                     }
                     catch (Exception err)
                     {
-                        Debug.Fail(err.Message);
+                        Trace.TraceError(err.Message);
                         return 0;
                     }
                 });

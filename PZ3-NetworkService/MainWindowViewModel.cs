@@ -1,10 +1,4 @@
 ﻿using PZ3_NetworkService.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PZ3_NetworkService
 {
@@ -39,17 +33,21 @@ namespace PZ3_NetworkService
                 case "network":
                     this.CurrentViewModel = this.networkViewModel;
                     break;
+
                 case "networkData":
                     this.CurrentViewModel = this.networkDataViewModel;
                     break;
+
                 case "dataChart":
                     this.CurrentViewModel = this.dataChartViewModel;
                     break;
+
                 case "report":
                     this.CurrentViewModel = this.reportViewModel;
                     break;
             }
         }
+
         public bool OnClosing()
         {
             Database.Save();
