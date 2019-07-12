@@ -52,8 +52,8 @@ namespace PZ3_NetworkService.ViewModel
         public string ToolTip { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
-        public double cX { get => this.X - this.R / 2; }
-        public double cY { get => this.Y - this.R / 2; }
+        public double cX { get => this.X - (this.R / 2); }
+        public double cY { get => this.Y - (this.R / 2); }
         public double R { get; set; }
         public Color Color { get; set; }
 
@@ -79,7 +79,7 @@ namespace PZ3_NetworkService.ViewModel
             set
             {
                 this.lines = value;
-                this.OnPropertyChanged("Lines");
+                this.OnPropertyChanged(nameof(this.Lines));
             }
         }
 
@@ -91,7 +91,7 @@ namespace PZ3_NetworkService.ViewModel
             set
             {
                 this.points = value;
-                this.OnPropertyChanged("Points");
+                this.OnPropertyChanged(nameof(this.Points));
             }
         }
 
@@ -103,7 +103,7 @@ namespace PZ3_NetworkService.ViewModel
             set
             {
                 this.labels = value;
-                this.OnPropertyChanged("Labels");
+                this.OnPropertyChanged(nameof(this.Labels));
             }
         }
 
@@ -113,11 +113,11 @@ namespace PZ3_NetworkService.ViewModel
         private double maxTemp;
         private double minTemp;
 
-        public int MarginTop { get; private set; } = 10;
-        public int MarginLeft { get; private set; } = 50;
-        public int MarginBottom { get; private set; } = 60;
-        public int MarginRight { get; private set; } = 30;
-        public int CanvasHeight { get; private set; } = 350;
+        public int MarginTop { get; } = 10;
+        public int MarginLeft { get; } = 50;
+        public int MarginBottom { get; } = 60;
+        public int MarginRight { get; } = 30;
+        public int CanvasHeight { get; } = 350;
         public int CanvasWidth { get; private set; } = 600;
         public int ChartHeight { get => this.CanvasHeight - (this.MarginTop + this.MarginBottom); }
         public int ChartWidth { get => this.CanvasWidth - (this.MarginLeft + this.MarginRight); }
@@ -131,7 +131,7 @@ namespace PZ3_NetworkService.ViewModel
                 if (value != this.limit)
                 {
                     this.limit = value < 0 ? 0 : value;
-                    this.OnPropertyChanged("Limit");
+                    this.OnPropertyChanged(nameof(this.Limit));
                 }
             }
         }
@@ -264,10 +264,16 @@ namespace PZ3_NetworkService.ViewModel
             var timeList = new List<DateTime>();
             for (int i = 0; i < n && i < strList.Count; ++i)
             {
-                var match = Regex.Match(strList[i], @"^([0-9/]+ [0-9:]+).*?([0-9.]+)$");
+                var match = Regex.Match(strList[i], "^([0-9/]+[, ]*[0-9:]+).*?([0-9.]+)$");
                 string sdate = match.Groups[1].Value;
                 string stemp = match.Groups[2].Value;
-                var date = DateTime.Parse(sdate, CultureInfo.InvariantCulture);
+
+                if (!DateTime.TryParse(sdate, out var date))
+                {
+                    Trace.TraceWarning($"Could not parse {sdate} to DateTime");
+                    continue;
+                }
+
                 if (double.TryParse(stemp, out double temp))
                 {
                     tempList.Add(temp);
